@@ -28,6 +28,11 @@ data/cache/
 *.local.json
 .secrets/
 
+# Internal reference docs (e.g. the PharmEasy blog audit spreadsheet used to source
+# the blog interlinks). Kept local; never published to the public repo.
+*.xlsx
+*.xls
+
 # NOTE: data/*.json (data.json, fever_signal.json, confirmed_cases.json) are
 # intentionally NOT ignored -- the GitHub Actions cron commits the regenerated
 # data files so the static dashboard can read them.

@@ -321,15 +321,37 @@
 
   /* ---- PharmEasy-style two-tier header ---- */
   header.site{position:sticky; top:0; z-index:1200}
-  .pe-topbar{background:var(--pe-teal)}
+  .pe-topbar{background:var(--pe-teal); position:relative}
   .pe-topbar-in{display:flex; align-items:center; justify-content:space-between; height:60px}
   .pe-logo{display:flex; align-items:center; gap:9px; text-decoration:none}
   .pe-mark{width:26px; height:26px; flex:none}
   .pe-logo-img{height:26px; width:auto; display:block}
   .pe-word{font-family:var(--font); font-weight:800; font-size:23px; letter-spacing:-.5px; color:#fff; line-height:1}
-  .pe-topnav{display:flex; align-items:center; gap:18px}
-  .pe-topnav a{color:#fff; text-decoration:none; font-size:13.5px; font-weight:600; opacity:.95}
-  .pe-topnav a:hover{opacity:1; text-decoration:underline}
+  /* ---- PharmEasy top navigation (dropdowns + mobile hamburger) ---- */
+  .pe-topnav{display:flex; align-items:center; gap:4px}
+  .pe-nav-item{position:relative}
+  .pe-nav-btn, .pe-nav-link{display:inline-flex; align-items:center; gap:5px; background:none; border:0; color:#fff; font-family:var(--font); font-size:13.5px; font-weight:600; opacity:.95; cursor:pointer; padding:8px 10px; border-radius:7px; text-decoration:none; white-space:nowrap}
+  .pe-nav-btn:hover, .pe-nav-link:hover, .pe-nav-item.open .pe-nav-btn{opacity:1; background:rgba(255,255,255,.14)}
+  .pe-caret{font-size:9px; transition:transform .15s}
+  .pe-nav-item.open .pe-caret{transform:rotate(180deg)}
+  .pe-nav-drop{position:absolute; top:calc(100% + 6px); left:0; min-width:210px; background:#fff; border:1px solid var(--line); border-radius:10px; box-shadow:0 10px 28px rgba(16,24,40,.18); padding:6px; display:none; z-index:1300}
+  .pe-nav-item:last-child .pe-nav-drop{left:auto; right:0}
+  .pe-nav-item.open .pe-nav-drop{display:block}
+  .pe-nav-drop a{display:block; padding:9px 12px; color:var(--ink); font-size:13.5px; font-weight:500; text-decoration:none; border-radius:7px; white-space:nowrap}
+  .pe-nav-drop a:hover{background:var(--pe-tint-2); color:var(--pe-teal-darker)}
+  .pe-burger{display:none; background:none; border:0; color:#fff; font-size:21px; line-height:1; cursor:pointer; padding:4px 9px; border-radius:7px}
+  .pe-burger:hover{background:rgba(255,255,255,.14)}
+  @media (max-width:820px){
+    .pe-burger{display:block}
+    .pe-topnav{display:none; position:absolute; top:100%; left:0; right:0; flex-direction:column; align-items:stretch; gap:2px; background:var(--pe-teal-dark); padding:8px; box-shadow:0 10px 22px rgba(0,0,0,.22); z-index:1300}
+    .pe-topnav.open{display:flex}
+    .pe-nav-item{position:static}
+    .pe-nav-btn, .pe-nav-link{width:100%; justify-content:space-between; font-size:15px; padding:12px}
+    .pe-nav-drop{position:static; display:none; min-width:0; background:rgba(255,255,255,.06); border:0; box-shadow:none; border-radius:8px; margin:2px 0 4px; padding:4px 4px 4px 10px}
+    .pe-nav-item.open .pe-nav-drop{display:block}
+    .pe-nav-drop a{color:#eafffb}
+    .pe-nav-drop a:hover{background:rgba(255,255,255,.12); color:#fff}
+  }
   .pe-tag{color:#eafffb; border:1px solid rgba(255,255,255,.45); padding:4px 11px; border-radius:999px; font-size:12.5px; font-weight:600}
   .pe-subbar{background:var(--card); border-bottom:1px solid var(--line); box-shadow:0 2px 3px rgba(16,24,40,.05)}
   .head-row{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; padding:14px 18px}
@@ -596,6 +618,14 @@
   .faq .qa:first-child{border-top:none}
   .faq .qa h3{margin:0 0 5px; font-size:14.5px; color:var(--ink)}
   .faq .qa p{margin:0; font-size:13px; color:var(--text)}
+  /* ---- Further reading (PharmEasy blog interlinks) ---- */
+  .related-intro{font-size:13px; color:var(--muted); margin:14px 16px 6px}
+  .related-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; padding:6px 16px 16px}
+  .related-col h3{margin:0 0 7px; font-size:13.5px; color:var(--ink); padding-left:9px; border-left:3px solid var(--pe-teal)}
+  .related-col ul{list-style:none; margin:0; padding:0}
+  .related-col li{margin:0 0 6px}
+  .related-col a{font-size:13px; color:var(--pe-teal-darker); text-decoration:none; font-weight:500}
+  .related-col a:hover{text-decoration:underline}
 </style>
 </head>
 <body class="prerendered">
@@ -603,13 +633,42 @@
 <header class="site">
   <div class="pe-topbar">
     <div class="wrap pe-topbar-in">
-      <a class="pe-logo" href="#" aria-label="PharmEasy">
+      <a class="pe-logo" href="https://pharmeasy.in/" aria-label="PharmEasy home">
         <img class="pe-logo-img"
              src="https://pharmeasy.in/blog/wp-content/themes/Pharmeasy/assets/img/pe_logo-white.svg"
              alt="PharmEasy"
              onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'">
         <span class="pe-word" style="display:none">PharmEasy</span>
       </a>
+      <nav class="pe-topnav" id="pe-topnav" aria-label="PharmEasy">
+        <div class="pe-nav-item">
+          <button type="button" class="pe-nav-btn" aria-expanded="false" aria-haspopup="true">Healthcare <span class="pe-caret" aria-hidden="true">&#9662;</span></button>
+          <div class="pe-nav-drop">
+            <a href="https://pharmeasy.in/online-medicine-order?src=homecard">Medicines</a>
+            <a href="https://pharmeasy.in/diagnostics?src=homecard">Lab tests</a>
+            <a href="https://pharmeasy.in/online-doctor-consultation/">Doctor consult</a>
+            <a href="https://pharmeasy.in/health-care?src=homecard">Healthcare products</a>
+          </div>
+        </div>
+        <div class="pe-nav-item">
+          <button type="button" class="pe-nav-btn" aria-expanded="false" aria-haspopup="true">Health Hub <span class="pe-caret" aria-hidden="true">&#9662;</span></button>
+          <div class="pe-nav-drop">
+            <a href="https://pharmeasy.in/blog?src=homecard">Blog</a>
+            <a href="https://pharmeasy.in/conditions">Conditions</a>
+            <a href="https://pharmeasy.in/qna">AskEasy</a>
+          </div>
+        </div>
+        <a class="pe-nav-link" href="https://pharmeasy.in/legal/editorial-policy">Editorial Policy</a>
+        <div class="pe-nav-item">
+          <button type="button" class="pe-nav-btn" aria-expanded="false" aria-haspopup="true">Research &amp; Insights <span class="pe-caret" aria-hidden="true">&#9662;</span></button>
+          <div class="pe-nav-drop">
+            <a href="https://pharmeasy.in/research/dengue">Dengue Research 2025</a>
+            <a href="https://pharmeasy.in/research/diabetes">Diabetes Research</a>
+            <a href="https://pharmeasy.in/research/branded-vs-generics">Generic Medicines Research</a>
+          </div>
+        </div>
+      </nav>
+      <button type="button" class="pe-burger" aria-label="Open menu" aria-expanded="false" aria-controls="pe-topnav">&#9776;</button>
     </div>
   </div>
   <div class="pe-subbar">
@@ -760,7 +819,7 @@
           <h3>Where it falls short</h3>
           <ul>
             <li>It only looks at the weather. It doesn't count real mosquitoes, infections or cases.</li>
-            <li>It's tuned for the mosquitoes behind dengue and chikungunya (Aedes). Malaria, Japanese encephalitis and filariasis come from other mosquitoes that breed in different places, so treat those as only loosely covered until we add dedicated modules.</li>
+            <li>It's tuned for the mosquitoes behind <a href="https://pharmeasy.in/blog/5-ways-to-avoid-dengue-fever/" target="_blank" rel="noopener">dengue</a> and chikungunya (Aedes). <a href="https://pharmeasy.in/blog/types-of-malaria-symptoms-causes-and-treatment/" target="_blank" rel="noopener">Malaria</a>, Japanese encephalitis and filariasis come from other mosquitoes that breed in different places, so treat those as only loosely covered until we add dedicated modules.</li>
             <li>We take one reading near the middle of each city, so very local spots like building sites or stored water won't show up.</li>
             <li>Treat the score as a rough guide, not an exact measurement.</li>
             <li>One more time: the air temperature here is just weather. It is not a fever.</li>
@@ -906,6 +965,40 @@
     <div id="faq-body"><!--build:faq--><div class='qa'><h3>Is dengue, malaria or chikungunya risk high in my city right now?</h3><p>Mosquito Watch shows a breeding-favourability score from 0 to 100 for major Indian cities, based only on this week's weather (temperature, humidity and recent rain). A high score means the weather suits mosquito breeding. It is a screening and comparison guide, not a count of cases and not a measure of your personal chance of illness.</p></div><div class='qa'><h3>Where does the data come from?</h3><p>Three independent sources, kept separate. Breeding weather comes from Open-Meteo. The fever signal comes from Google Trends search interest. Confirmed cases come from the official IDSP weekly outbreak reports published by India's Ministry of Health and Family Welfare.</p></div><div class='qa'><h3>Is this medical advice or a case forecast?</h3><p>No. Mosquito Watch is an environmental risk and surveillance dashboard, not a diagnostic or predictive tool. It never predicts individual illness or forecasts case counts. For diagnosis or treatment consult a doctor, and for official alerts follow your state health department and IDSP.</p></div><div class='qa'><h3>How often is it updated?</h3><p>Breeding weather updates daily. The fever signal updates weekly. Confirmed cases follow the IDSP weekly reports, which lag by a week or two, so Layer 3 reviews a finished season rather than counting live.</p></div><div class='qa'><h3>What do the risk levels mean?</h3><p>Scores are grouped into four bands: Low (0 to 24), Moderate (25 to 49), High (50 to 74) and Very High (75 to 100). The bands compare cities against each other by weather only. They are not the chance of mosquitoes being present, of disease spreading, or of anyone falling ill.</p></div><div class='qa'><h3>Why keep the three layers separate instead of a single score?</h3><p>Because they measure different things on different timelines. Weather conditions tend to lead, fever searches follow, and confirmed cases come last. Keeping them apart is more honest and easier to check than blending them into one number.</p></div><!--/build:faq--></div>
   </section>
 
+  <!-- Further reading: interlinks to relevant PharmEasy blogs (from the May 2026 monsoon blog audit) -->
+  <section class="section related" id="further-reading">
+    <div class="section-head"><h2>Further reading from PharmEasy</h2></div>
+    <p class="related-intro">Educational health articles from the PharmEasy blog on the diseases this dashboard tracks. These are general reads, not specific to the dashboard's data.</p>
+    <div class="related-grid">
+      <div class="related-col">
+        <h3>Dengue</h3>
+        <ul>
+          <li><a href="https://pharmeasy.in/blog/5-ways-to-avoid-dengue-fever/" target="_blank" rel="noopener">How to avoid dengue fever</a></li>
+          <li><a href="https://pharmeasy.in/blog/home-remedies-for-dengue-by-dr-siddharth-gupta/" target="_blank" rel="noopener">Home remedies for dengue</a></li>
+          <li><a href="https://pharmeasy.in/blog/food-for-dengue-what-to-eat-and-what-to-avoid/" target="_blank" rel="noopener">Food for dengue: what to eat and avoid</a></li>
+          <li><a href="https://pharmeasy.in/blog/diabetes-can-make-dengue-more-lethal/" target="_blank" rel="noopener">Diabetes and dengue risk</a></li>
+        </ul>
+      </div>
+      <div class="related-col">
+        <h3>Malaria</h3>
+        <ul>
+          <li><a href="https://pharmeasy.in/blog/types-of-malaria-symptoms-causes-and-treatment/" target="_blank" rel="noopener">Types of malaria: symptoms and treatment</a></li>
+          <li><a href="https://pharmeasy.in/blog/foods-for-malaria-what-to-eat-and-what-to-avoid/" target="_blank" rel="noopener">Foods for malaria</a></li>
+          <li><a href="https://pharmeasy.in/blog/home-remedies-for-malaria-by-dr-siddharth-gupta/" target="_blank" rel="noopener">Home remedies for malaria</a></li>
+        </ul>
+      </div>
+      <div class="related-col">
+        <h3>Mosquito bites and monsoon health</h3>
+        <ul>
+          <li><a href="https://pharmeasy.in/blog/home-remedies-for-mosquito-bite-by-dr-siddharth-gupta/" target="_blank" rel="noopener">Mosquito bite remedies</a></li>
+          <li><a href="https://pharmeasy.in/blog/child-care-mosquito-bites-on-babies-home-remedies-treatment-and-prevention/" target="_blank" rel="noopener">Mosquito bites on babies</a></li>
+          <li><a href="https://pharmeasy.in/blog/common-illnesses-during-monsoons-in-india/" target="_blank" rel="noopener">Common monsoon illnesses in India</a></li>
+          <li><a href="https://pharmeasy.in/blog/17-simple-health-tips-for-the-monsoons/" target="_blank" rel="noopener">Monsoon health tips</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
 </main>
 
 <footer class="site">
@@ -957,7 +1050,47 @@
 
   document.addEventListener("DOMContentLoaded", init);
 
+  function wireNav(){
+    var burger = document.querySelector(".pe-burger");
+    var topnav = document.getElementById("pe-topnav");
+    function closeDrops(){
+      Array.prototype.forEach.call(document.querySelectorAll(".pe-nav-item.open"), function(o){
+        o.classList.remove("open");
+        var b = o.querySelector(".pe-nav-btn"); if(b) b.setAttribute("aria-expanded","false");
+      });
+    }
+    function closePanel(){
+      if(topnav) topnav.classList.remove("open");
+      if(burger){ burger.setAttribute("aria-expanded","false"); burger.innerHTML = "&#9776;"; }
+    }
+    if(burger && topnav){
+      burger.addEventListener("click", function(e){
+        e.stopPropagation();
+        var open = topnav.classList.toggle("open");
+        burger.setAttribute("aria-expanded", open ? "true" : "false");
+        burger.innerHTML = open ? "&#10005;" : "&#9776;";
+        if(!open) closeDrops();
+      });
+    }
+    Array.prototype.forEach.call(document.querySelectorAll(".pe-nav-btn"), function(btn){
+      btn.addEventListener("click", function(e){
+        e.stopPropagation();
+        var item = btn.parentNode, willOpen = !item.classList.contains("open");
+        closeDrops();
+        if(willOpen){ item.classList.add("open"); btn.setAttribute("aria-expanded","true"); }
+      });
+    });
+    document.addEventListener("click", function(e){
+      var t = e.target;
+      if(!(t.closest && (t.closest(".pe-topnav") || t.closest(".pe-burger")))){ closeDrops(); closePanel(); }
+    });
+    document.addEventListener("keydown", function(e){
+      if(e.key === "Escape" || e.keyCode === 27){ closeDrops(); closePanel(); }
+    });
+  }
+
   function init(){
+    wireNav();   // PharmEasy header dropdowns + mobile hamburger (independent of the data layers)
     // Chain card 1 (Breeding Weather) scrolls to its section, matching cards 2 and 3 (wired in
     // flipChainCardL2 / flipChainCardL3). Its target section is static HTML, so wire it up front.
     var c1 = document.getElementById("chain-l1");
