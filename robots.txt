@@ -1,0 +1,8 @@
+# Mosquito Watch -- STAGING origin (e.g. github.io).
+# Disallow keeps the staging origin out of search; the canonical tag points every page at the
+# production URL. In production, indexing is governed by the pharmeasy.in apex robots.txt, which
+# must allow /research/mosquito-watch-2026/ and reference the sitemap below.
+User-agent: *
+Disallow: /
+
+Sitemap: https://pharmeasy.in/research/mosquito-watch-2026/sitemap.xml

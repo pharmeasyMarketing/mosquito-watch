@@ -14,7 +14,8 @@ through the season" story renders sensibly in the demo.
 from __future__ import annotations
 
 import hashlib
-from datetime import date, timedelta
+import math
+from datetime import date as _date, timedelta
 
 from .base import RegionInterest, TrendPoint, TrendsProvider
 
@@ -44,9 +45,15 @@ def _query(terms: list[str]) -> str:
 
 def _recent_sundays(weeks: int) -> list[str]:
     """`weeks` weekly ISO dates (Sundays), oldest first, ending this week."""
-    today = date.today()
+    today = _date.today()
     last_sunday = today - timedelta(days=(today.weekday() + 1) % 7)
     return [(last_sunday - timedelta(weeks=(weeks - 1 - i))).isoformat() for i in range(weeks)]
+
+
+def _monsoon(d) -> float:
+    """0..1 seasonal weight peaking in late Aug (the monsoon fever season)."""
+    doy = d.timetuple().tm_yday
+    return math.exp(-((doy - 240) ** 2) / (2 * 55.0 ** 2))
 
 
 class MockTrendsProvider(TrendsProvider):
@@ -54,8 +61,10 @@ class MockTrendsProvider(TrendsProvider):
     attribution = "SAMPLE synthetic data for development -- not real Google Trends"
     is_sample = True
 
-    def interest_over_time(self, terms, geo="IN", weeks=12):
+    def interest_over_time(self, terms, geo="IN", weeks=12, date=None):
         q = _query(terms)
+        if date and " " in str(date):                  # custom span "start end"
+            return self._span_series(q, geo, str(date))
         base = 35.0 + 30.0 * _hash01("base", q)        # 35..65 per-group baseline
         dates = _recent_sundays(weeks)
         points = []
@@ -66,6 +75,24 @@ class MockTrendsProvider(TrendsProvider):
             value = max(0.0, min(100.0, base + trend + noise))
             points.append(TrendPoint(date=d, value=round(value, 1)))
         return points
+
+    def _span_series(self, q, geo, date_str):
+        """Weekly synthetic series across a custom date span, shaped by a monsoon
+        seasonal curve (peak ~Aug/Sep) and normalized to peak 100 like Trends.
+        `geo` seeds the noise so different states look distinct."""
+        parts = date_str.split(" ")
+        start = _date.fromisoformat(parts[0])
+        end = min(_date.fromisoformat(parts[1]), _date.today())   # no future data
+        base = 25.0 + 20.0 * _hash01("base", q)
+        d = start - timedelta(days=start.weekday())               # first Monday
+        raw = []
+        while d <= end:
+            noise = 8.0 * (_hash01(q, geo, d.isoformat()) - 0.5)
+            raw.append((d, base + 60.0 * _monsoon(d) + noise))
+            d += timedelta(weeks=1)
+        peak = max((v for _, v in raw), default=1.0) or 1.0
+        return [TrendPoint(date=dd.isoformat(), value=round(max(0.0, min(100.0, 100.0 * v / peak)), 1))
+                for dd, v in raw]
 
     def interest_by_region(self, terms, geo="IN", weeks=12, regions=None):
         q = _query(terms)

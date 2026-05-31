@@ -1,8 +1,8 @@
 {
   "layer": 3,
   "layer_name": "Confirmed Cases (IDSP weekly outbreaks)",
-  "model_version": "L3-0.1.0",
-  "generated_at": "2026-05-31T10:43:48+00:00",
+  "model_version": "L3-0.2.0",
+  "generated_at": "2026-05-31T13:02:59+00:00",
   "source": "live",
   "attribution": "IDSP Weekly Outbreak Reports, Ministry of Health & Family Welfare (idsp.mohfw.gov.in)",
   "is_sample": false,
@@ -37,11 +37,6 @@
     {
       "key": "fever_rash",
       "label": "Fever with Rash",
-      "headline": false
-    },
-    {
-      "key": "afi",
-      "label": "Acute Febrile Illness",
       "headline": false
     }
   ],
@@ -93,13 +88,6 @@
         "Jharkhand",
         "West Bengal"
       ]
-    },
-    "afi": {
-      "label": "Acute Febrile Illness",
-      "outbreaks": 0,
-      "cases": 0,
-      "deaths": 0,
-      "states": []
     }
   },
   "by_state": [
@@ -257,7 +245,7 @@
       "district": "Jalgaon",
       "cases": 10,
       "deaths": 0,
-      "status": "Cases",
+      "status": "",
       "outbreak_id": "MH/JAL/2026/15/620",
       "week": 15
     },
@@ -279,7 +267,7 @@
       "district": "Jehanabad",
       "cases": 5,
       "deaths": 0,
-      "status": "Cases",
+      "status": "",
       "outbreak_id": "BH/JEH/2026/15/616",
       "week": 15
     }

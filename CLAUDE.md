@@ -136,8 +136,9 @@ Before publicly claiming the leading-indicator chain works, overlay all three la
 - Heavy disclaimers + link to official IDSP sources; re-check with compliance once fever data is in scope.
 
 ## Open decisions / TODO
-- [ ] Confirm Open-Meteo commercial licensing terms (or budget paid tier).
-- [ ] Pick the Google Trends managed API provider.
-- [ ] Finalize the initial city list + lat/longs.
-- [ ] Decide hosting target (GitHub Pages vs Vercel vs Netlify).
-- [ ] Resolve final domain (free subdomain first; a branded subdomain later needs one DNS CNAME record added by whoever manages the org's DNS — do this AFTER there's a working demo to show).
+- [ ] Confirm Open-Meteo commercial licensing terms (or budget paid tier). STILL OPEN, launch blocker.
+- [x] Google Trends provider: SerpApi (active; needs SERPAPI_KEY as a GitHub Actions secret). Apify is wired as a fallback behind the same interface.
+- [ ] Finalize the initial city list + lat/longs. 32 cities live for now.
+- [x] Hosting: GitHub Pages from the public repo pharmeasyMarketing/mosquito-watch, with GitHub Actions as the cron + build engine (daily/weekly/monthly). The site is SSG: src/build_site.py pre-renders meta, JSON-LD and content into index.html at build time (stdlib, idempotent). See the seo-and-hosting memory.
+- [x] Final URL: https://pharmeasy.in/research/mosquito-watch-2026/ . This is a SUBPATH on the apex, served via a reverse-proxy / path rule at PharmEasy's edge (NOT a DNS CNAME, you cannot CNAME a path). The base URL lives in one place: config/site.json. The github.io Pages URL is the staging/QA origin (kept out of the index via a Disallow robots.txt); canonical always points at the production URL.
+- [ ] Infra + apex robots: ask PharmEasy infra to add the /research/mosquito-watch-2026/* reverse-proxy route and to allow that path (plus the sitemap reference) in the pharmeasy.in apex robots.txt before launch.

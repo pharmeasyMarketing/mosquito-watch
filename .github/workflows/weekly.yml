@@ -1,0 +1,82 @@
+name: Weekly - Layer 2 fever signal + Layer 3 latest report
+
+# Refreshes Layer 2 (Fever Signal via SerpApi) and the Layer 3 latest IDSP report
+# once a week. A failure of either source is non-fatal: the step is allowed to fail
+# so the other layers and the deploy still go through with the last good data.
+#
+# Requires the SERPAPI_KEY repository secret for Layer 2. Layer 3 needs no key.
+# If the IDSP gov TLS chain ever fails on the runner, add  IDSP_INSECURE: "1"  to the
+# Layer 3 step env (it disables certificate verification for that government host only).
+
+on:
+  schedule:
+    - cron: "30 2 * * 1"      # Monday 08:00 IST (02:30 UTC)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies (pdfplumber for Layer 3 PDF parsing)
+        run: pip install -r requirements.txt
+
+      - name: Build Layer 2 (Fever Signal, SerpApi)
+        continue-on-error: true
+        run: python src/build_layer2.py --provider serpapi
+        env:
+          # All five keys are mapped in so the provider can fail over between them as each
+          # key's monthly SerpApi search quota runs out (see load_keys + looks_like_billing).
+          SERPAPI_KEY: ${{ secrets.SERPAPI_KEY }}
+          SERPAPI_KEY_2: ${{ secrets.SERPAPI_KEY_2 }}
+          SERPAPI_KEY_3: ${{ secrets.SERPAPI_KEY_3 }}
+          SERPAPI_KEY_4: ${{ secrets.SERPAPI_KEY_4 }}
+          SERPAPI_KEY_5: ${{ secrets.SERPAPI_KEY_5 }}
+
+      - name: Build Layer 3 latest report (IDSP, live)
+        continue-on-error: true
+        run: python src/build_layer3.py --source live
+
+      - name: Pre-render site
+        run: python src/build_site.py
+        env:
+          SITE_ENV: staging
+
+      - name: Commit refreshed data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/ index.html sitemap.xml robots.txt site.webmanifest
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore(data): weekly Layer 2 + Layer 3 latest refresh [skip ci]"
+            git pull --rebase --autostash origin main || true
+            git push
+          fi
+
+      - name: Assemble _site
+        run: |
+          mkdir -p _site
+          cp index.html robots.txt sitemap.xml site.webmanifest _site/
+          cp -r data assets _site/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deploy
+        uses: actions/deploy-pages@v4

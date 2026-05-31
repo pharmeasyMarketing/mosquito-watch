@@ -47,55 +47,90 @@ def gdrive_direct(url: str) -> str:
     return url
 
 
+def _anchors_in_row(tr: str) -> list[tuple[str, str]]:
+    """(href, title) for every weekly-PDF link in a YEAR row, in document order."""
+    anchors = []
+    for attrs, _text in _ANCHOR_RE.findall(tr):
+        hm = _HREF_RE.search(attrs)
+        if not hm:
+            continue
+        href = hm.group(1).strip()
+        if not _is_pdf_link(href):
+            continue
+        tm = _TITLE_RE.search(attrs)
+        anchors.append((href, tm.group(1) if tm else ""))
+    return anchors
+
+
+def _year_rows(html: str) -> dict[int, list[tuple[str, str]]]:
+    """Map each year on the listing to its ordered list of (href, title) weeks."""
+    out: dict[int, list[tuple[str, str]]] = {}
+    for tr in _TR_RE.findall(html):
+        ym = _YEAR_RE.search(tr)
+        if not ym:
+            continue
+        anchors = _anchors_in_row(tr)
+        if anchors:
+            out[int(ym.group(1))] = anchors
+    return out
+
+
+def _week_of(anchors: list, idx: int, title: str) -> int:
+    """Week number = link position in the row (1-based), cross-checked against the
+    title text (titles occasionally carry a copy-paste typo, so position wins
+    unless the title is within 1)."""
+    week = idx + 1
+    tm = _WEEKNO_RE.search(title)
+    if tm and abs(int(tm.group(1)) - week) <= 1:
+        week = int(tm.group(1))
+    return week
+
+
 def discover_latest(listing_url: str, insecure: bool = False) -> dict:
     """Return {pdf_url, year, week, week_label, host} for the newest weekly report.
 
     Raises RuntimeError if the listing page has no recognizable YEAR/WEEKS table
     (a likely sign the site was redesigned -- fail loudly, don't guess).
     """
-    html = get_text(listing_url, insecure=insecure)
-    best_year = -1
-    best_anchors: list[tuple[str, str]] = []  # (href, title) in document order
-    for tr in _TR_RE.findall(html):
-        ym = _YEAR_RE.search(tr)
-        if not ym:
-            continue
-        year = int(ym.group(1))
-        anchors = []
-        for attrs, _text in _ANCHOR_RE.findall(tr):
-            hm = _HREF_RE.search(attrs)
-            if not hm:
-                continue
-            href = hm.group(1).strip()
-            if not _is_pdf_link(href):
-                continue
-            tm = _TITLE_RE.search(attrs)
-            anchors.append((href, tm.group(1) if tm else ""))
-        if anchors and year > best_year:
-            best_year, best_anchors = year, anchors
-
-    if not best_anchors:
+    rows = _year_rows(get_text(listing_url, insecure=insecure))
+    if not rows:
         raise RuntimeError(
             f"No weekly-report links found on the IDSP listing page ({listing_url}). "
             "The page layout may have changed -- discovery needs the YEAR/WEEKS table."
         )
-
-    href, title = best_anchors[-1]  # newest week = last link in the newest-year row
+    year = max(rows)
+    anchors = rows[year]
+    idx = len(anchors) - 1  # newest week = last link in the newest-year row
+    href, title = anchors[idx]
+    week = _week_of(anchors, idx, title)
     pdf_url = urllib.parse.urljoin(listing_url, href)
-    # Week number: trust the link's position in the row; cross-check the title.
-    week = len(best_anchors)
-    tm = _WEEKNO_RE.search(title)
-    if tm:
-        title_week = int(tm.group(1))
-        # Titles occasionally carry a copy-paste typo; position wins, but if they
-        # disagree by 1 we defer to the (usually-correct) title.
-        if abs(title_week - week) <= 1:
-            week = title_week
     host = "google-drive" if "drive.google.com" in pdf_url.lower() else "idsp-server"
     return {
-        "pdf_url": pdf_url, "year": best_year, "week": week,
-        "week_label": f"{week}{_ordinal(week)} Week, {best_year}", "host": host,
+        "pdf_url": pdf_url, "year": year, "week": week,
+        "week_label": f"{week}{_ordinal(week)} Week, {year}", "host": host,
     }
+
+
+def discover_year(listing_url: str, year: int, insecure: bool = False) -> list[dict]:
+    """Return every weekly report for `year` as a list of
+    {week, pdf_url, week_label, host}, ordered by week. Raises if the year is not
+    on the listing (fail loudly rather than silently returning nothing)."""
+    rows = _year_rows(get_text(listing_url, insecure=insecure))
+    if year not in rows:
+        raise RuntimeError(
+            f"Year {year} not found on the IDSP listing page ({listing_url}). "
+            f"Years present: {', '.join(str(y) for y in sorted(rows, reverse=True))}."
+        )
+    out = []
+    for idx, (href, title) in enumerate(rows[year]):
+        week = _week_of(rows[year], idx, title)
+        out.append({
+            "week": week,
+            "pdf_url": urllib.parse.urljoin(listing_url, href),
+            "week_label": f"{week}{_ordinal(week)} Week, {year}",
+            "host": "google-drive" if "drive.google.com" in href.lower() else "idsp-server",
+        })
+    return out
 
 
 def download_pdf(url: str, insecure: bool = False) -> bytes:

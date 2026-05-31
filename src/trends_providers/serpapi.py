@@ -117,11 +117,11 @@ class SerpApiTrendsProvider(TrendsProvider):
             "switches": self.switch_log,
         }
 
-    def interest_over_time(self, terms, geo="IN", weeks=12):
+    def interest_over_time(self, terms, geo="IN", weeks=12, date=None):
         q = " + ".join(terms)
         data = self._search({
             "engine": "google_trends", "data_type": "TIMESERIES",
-            "q": q, "geo": geo, "date": date_token(weeks), "tz": IST_TZ,
+            "q": q, "geo": geo, "date": date or date_token(weeks), "tz": IST_TZ,
         })
         timeline = (data.get("interest_over_time") or {}).get("timeline_data") or []
         if not timeline:
@@ -134,7 +134,9 @@ class SerpApiTrendsProvider(TrendsProvider):
         weekly = to_weekly(pairs)
         if len(weekly) < 2:
             raise RuntimeError("SerpApi timeline did not resample to enough weekly points")
-        return weekly[-weeks:]
+        # A custom `date` span (e.g. year-over-year) must keep ALL weeks; only the
+        # rolling weeks-based window truncates to the most recent `weeks`.
+        return weekly if date else weekly[-weeks:]
 
     def interest_by_region(self, terms, geo="IN", weeks=12, regions=None):
         q = " + ".join(terms)

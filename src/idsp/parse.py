@@ -31,7 +31,9 @@ except ImportError:  # run directly as a script (python src/idsp/parse.py), not 
     from base import Outbreak, WeeklyReport
 
 # Outbreak Unique ID, e.g. "KL/KOT/2026/15/595" = State/District/Year/Week/number.
-ID_RE = re.compile(r"^[A-Z]{2}/[A-Z]{2,5}/(20\d\d)/(\d{1,2})/\d{1,4}$")
+# Unanchored + searched (not matched) within the ID cell, because some weeks add a
+# leading "S.No." serial column whose number shares the cell ("1 KL/KOT/2026/15/595").
+ID_RE = re.compile(r"[A-Z]{2}/[A-Z]{2,5}/(20\d\d)/(\d{1,2})/\d{1,4}")
 
 # Column x-CENTRES read from a real header (page 3 of the 2026-W15 report). Used
 # only as a fallback when a header cannot be located on the PDF; normally we read
@@ -43,11 +45,14 @@ DEFAULT_CENTERS = [
 ]
 
 # Header keyword -> column name. Each header word's x-centre fixes that column.
+# Matching is loose (substring) so layout drift between weeks is tolerated: some
+# reports write "State-UT", others "State/UT" or just "State"; some add a leading
+# "S.No." column (handled by searching the ID within its cell, see ID_RE).
 _HEADER_KEYS = [
-    ("unique", "id"), ("state-ut", "state"), ("district", "district"),
-    ("illness", "disease"), ("disease-", "disease"), ("cases", "cases"),
+    ("unique", "id"), ("state", "state"), ("district", "district"),
+    ("illness", "disease"), ("disease", "disease"), ("cases", "cases"),
     ("deaths", "deaths"), ("outbreak", "date_start"), ("reporting", "date_report"),
-    ("status", "status"), ("comments-", "comments"), ("comments", "comments"),
+    ("status", "status"), ("comments", "comments"),
 ]
 
 # Lines we never treat as outbreak data or as name continuation.
@@ -184,6 +189,21 @@ def _first_int(s: str):
     return int(m.group()) if m else None
 
 
+def _norm_status(s: str) -> str:
+    """Map the parsed status cell to IDSP's small fixed vocabulary. The 'reported
+    late' section on later pages has a slightly offset column layout, so a stray
+    comment word can land in the status band; anything that is not a recognizable
+    status becomes blank rather than showing garbage."""
+    low = (s or "").lower()
+    if "control" in low:
+        return "Under Control"
+    if "surveillance" in low:
+        return "Under Surveillance"
+    if low.startswith("under"):
+        return _clean(s).title()
+    return ""
+
+
 def _iso_date(daytext: str) -> str:
     """'6th April 2026' -> '2026-04-06' (best effort; '' if unparseable)."""
     m = re.search(r"(\d{1,2})\w*\s+([A-Za-z]+)\s+(20\d\d)", daytext or "")
@@ -271,8 +291,8 @@ def parse_pdf(pdf, config: dict) -> WeeklyReport:
                 if _is_skip_line(joined):
                     cur = None  # a header / section-title / footer ends continuation
                     continue
-                idtok = cells.get("id", "")
-                m = ID_RE.match(idtok)
+                idcell = cells.get("id", "")
+                m = ID_RE.search(idcell)
                 if m:
                     cur = Outbreak(
                         disease_key="", disease="", state="",
@@ -280,7 +300,7 @@ def parse_pdf(pdf, config: dict) -> WeeklyReport:
                         cases=_first_int(cells.get("cases", "")),
                         deaths=_first_int(cells.get("deaths", "")),
                         status=cells.get("status", ""),
-                        outbreak_id=idtok, week=int(m.group(2)), year=int(m.group(1)),
+                        outbreak_id=m.group(0), week=int(m.group(2)), year=int(m.group(1)),
                         raw_disease=cells.get("disease", ""),
                         raw_state=cells.get("state", ""),
                     )
@@ -313,7 +333,7 @@ def parse_pdf(pdf, config: dict) -> WeeklyReport:
         ob.state = normalize_state(ob.raw_state, _id_prefix(ob.outbreak_id))
         ob.district = _clean(ob.district)
         ob.disease_key, ob.disease = classify(ob.raw_disease)
-        ob.status = _clean(ob.status)
+        ob.status = _norm_status(ob.status)
 
     week, year, week_label, period_label, start, end = _extract_report_week("\n".join(header_text_parts))
     if (week is None or year is None) and outbreaks:

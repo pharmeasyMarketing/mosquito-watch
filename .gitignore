@@ -16,6 +16,10 @@ Thumbs.db
 # Logs / scratch output
 *.log
 
+# Layer 3 season PDF cache (downloaded IDSP weekly reports; large + re-fetchable).
+# The aggregated data/confirmed_season.json is committed; these raw PDFs are not.
+data/cache/
+
 # Secrets -- API tokens/keys for Layer 2 real providers (Apify, SerpApi, ...).
 # Put APIFY_TOKEN / SERPAPI_KEY here as KEY=value lines; never commit them.
 # `*.env` covers .env and apify.env; .env.example ends in .example so it stays tracked.
@@ -24,5 +28,10 @@ Thumbs.db
 *.local.json
 .secrets/
 
-# NOTE: data/data.json is intentionally NOT ignored -- the GitHub Actions cron
-# commits the regenerated data file so the static dashboard can read it.
+# NOTE: data/*.json (data.json, fever_signal.json, confirmed_cases.json) are
+# intentionally NOT ignored -- the GitHub Actions cron commits the regenerated
+# data files so the static dashboard can read them.
+#
+# NOTE: tests/fixtures/idsp/*.pdf is intentionally tracked too -- a real saved
+# IDSP weekly report is the offline `fixture` source + the parser regression
+# fixture (Layer 3). It is a small one-off binary, committed on purpose.

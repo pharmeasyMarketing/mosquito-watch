@@ -1,6 +1,6 @@
 {
-  "_comment": "Editable config for Layer 3 (Confirmed Cases). Source = IDSP Weekly Outbreak Reports (Ministry of Health & Family Welfare). The live source discovers the newest weekly PDF from the listing page, downloads it (IDSP server or Google Drive), and parses the outbreak table. Change diseases/states/thresholds freely; no code edits needed. This is OFFICIAL reported outbreak data: authoritative, but it lags ~1-2 weeks and is under-reported. It validates the chain, it does not predict.",
-  "model_version": "L3-0.1.0",
+  "_comment": "Editable config for Layer 3 (Confirmed Cases). Source = IDSP Weekly Outbreak Reports (Ministry of Health & Family Welfare). Two views: (1) the SEASON retrospective -- build_layer3_season.py pulls every weekly PDF across the monsoon window of `season.year`, parses each, and writes the week-on-week series to data/confirmed_season.json (the dashboard's main Layer 3 view); (2) the LATEST-report tracker -- build_layer3.py grabs just the newest published report to data/confirmed_cases.json (a small 'this year so far' strip, with the source's own lag shown). IDSP data lags badly (often weeks), so 'this week' framing is dishonest; the season retrospective is the real story and the backtest substrate. Change diseases/states/thresholds freely; no code edits needed.",
+  "model_version": "L3-0.2.0",
 
   "listing_url": "https://idsp.mohfw.gov.in/index4.php?lang=1&level=0&linkid=406&lid=3689",
   "official_home": "https://idsp.mohfw.gov.in/",
@@ -11,13 +11,12 @@
   "_fixture_comment": "Saved real weekly PDF for the offline `fixture` source (regression-tests the real parser without network). Path is relative to the project root.",
   "fixture_pdf": "tests/fixtures/idsp/idsp_2026_latest.pdf",
 
-  "_diseases_comment": "Target conditions to surface on the dashboard. `match` = case-insensitive substrings tested against the PDF's cleaned Disease/Illness text (any one hits). `match_all` = groups where EVERY token must be present (order-free) -- used for 'Fever with Rash' because government PDFs render it as 'Fever with Rash', 'Fever and Rash', 'Fever & Rash', or, when the wrap drops a word, plain 'Fever Rash'. The first target that matches wins; anything matching none is kept as disease_key='other' so the all-disease total stays honest, but only these five are highlighted. `headline` is shown first / used as the default sort.",
+  "_diseases_comment": "Target conditions to surface on the dashboard. `match` = case-insensitive substrings tested against the PDF's cleaned Disease/Illness text (any one hits). `match_all` = groups where EVERY token must be present (order-free) -- used for 'Fever with Rash' because government PDFs render it as 'Fever with Rash', 'Fever and Rash', 'Fever & Rash', or, when the wrap drops a word, plain 'Fever Rash'. The first target that matches wins; anything matching none is kept as disease_key='other' so the all-disease total stays honest, but only these four are highlighted. `headline` is shown first / used as the default sort. (Acute Febrile Illness was dropped: it reported zero outbreaks across the 2025 season, so it only added an empty column/card.)",
   "diseases": [
     { "key": "dengue",      "label": "Dengue",                "headline": true, "match": ["dengue"] },
     { "key": "malaria",     "label": "Malaria",               "match": ["malaria"] },
     { "key": "chikungunya", "label": "Chikungunya",           "match": ["chikungunya", "chikun"] },
-    { "key": "fever_rash",  "label": "Fever with Rash",       "match": [], "match_all": [["fever", "rash"]] },
-    { "key": "afi",         "label": "Acute Febrile Illness", "match": ["acute febrile", "febrile illness"], "match_all": [["acute", "febrile"]] }
+    { "key": "fever_rash",  "label": "Fever with Rash",       "match": [], "match_all": [["fever", "rash"]] }
   ],
 
   "_states_comment": "India states + union territories. Used to normalize the messy state text the PDF parser pulls out (government PDFs wrap names mid-word, e.g. 'Chhattisg arh'), by matching on a space/punctuation-insensitive key. Same list as Layer 1/2. `code` is the ISO 3166-2:IN sub-region code; `idsp` is the 2-letter prefix IDSP uses inside its outbreak IDs (State/District/Year/Week/number) where known -- used only as a low-confidence fallback when the state text cannot be matched (IDSP's own prefixes are occasionally inconsistent, so parsed text always wins).",
@@ -61,10 +60,22 @@
   ],
 
   "sanity": {
-    "_comment": "MANDATORY data-quality guard (the single most important Layer 3 requirement). Because we parse government PDFs whose format drifts week to week, the build ABORTS and writes nothing if the parse looks broken: fewer than min_outbreaks total outbreak rows recovered, no Unique-ID anchors found at all (min_id_anchors), or no reporting week identified (require_report_week). A format change must NEVER silently feed a branded dashboard. min_target_outbreaks can be 0: a real quiet week may legitimately have no dengue/malaria/chikungunya/fever-rash/AFI outbreak, and that is not a parser failure.",
+    "_comment": "MANDATORY data-quality guard (the single most important Layer 3 requirement). Because we parse government PDFs whose format drifts week to week, the build ABORTS and writes nothing if the parse looks broken: fewer than min_outbreaks total outbreak rows recovered, no Unique-ID anchors found at all (min_id_anchors), or no reporting week identified (require_report_week). A format change must NEVER silently feed a branded dashboard. min_target_outbreaks can be 0: a real quiet week may legitimately have no dengue/malaria/chikungunya/fever-rash outbreak, and that is not a parser failure.",
     "min_outbreaks": 5,
     "min_id_anchors": 5,
     "min_target_outbreaks": 0,
     "require_report_week": true
+  },
+
+  "season": {
+    "_comment": "The monsoon-season retrospective window for build_layer3_season.py. It enumerates `year`'s weekly reports, keeps the weeks whose ISO span overlaps [window_start, window_end], downloads + parses each (both IDSP-server and Google-Drive hosts), and aggregates a week-on-week series. PDFs are cached under cache_dir (gitignored) so re-runs are fast and polite to the server. The season build ABORTS if fewer than min_weeks_parsed weeks come back clean. start_month/end_month mirror Layer 2's season block so the two layers line up for the backtest.",
+    "year": 2025,
+    "window_start": "2025-05-01",
+    "window_end": "2025-10-31",
+    "start_month": 5,
+    "end_month": 10,
+    "min_weeks_parsed": 12,
+    "polite_delay_s": 0.4,
+    "cache_dir": "data/cache/idsp"
   }
 }

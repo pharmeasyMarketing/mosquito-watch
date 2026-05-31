@@ -1,0 +1,40 @@
+{
+  "_comment": "Single source of truth for SEO/site identity, read by src/build_site.py at build time. The base_url is the FINAL public URL (a subfolder on the pharmeasy.in apex). In production this path is reverse-proxied by PharmEasy's edge to the GitHub Pages origin; it is NOT a DNS CNAME. Keep all in-page asset references relative so the same build works on both the github.io staging origin and the proxied production path. To swap the URL later, edit base_url here only.",
+
+  "base_url": "https://pharmeasy.in/research/mosquito-watch-2026/",
+  "site_name": "Mosquito Watch",
+  "brand": "PharmEasy",
+
+  "title": "Mosquito Watch | Dengue & Malaria Risk in India | PharmEasy",
+  "description": "Track dengue, malaria and chikungunya conditions across India through breeding weather, fever searches and officially confirmed cases. A weather-based screening guide, not a case forecast or medical advice.",
+  "keywords": ["dengue risk India", "malaria risk India", "chikungunya", "mosquito breeding", "vector borne disease surveillance", "IDSP", "monsoon disease"],
+
+  "locale": "en_IN",
+  "language": "en-IN",
+  "theme_color": "#10847E",
+
+  "og_image": "assets/img/og-mosquito-watch.png",
+  "og_image_width": 1200,
+  "og_image_height": 630,
+  "og_image_alt": "Mosquito Watch by PharmEasy: a breeding-favourability map of dengue, malaria and chikungunya conditions across India.",
+
+  "twitter_handle": "",
+
+  "publisher": {
+    "name": "PharmEasy",
+    "legal_name": "API Holdings Limited",
+    "url": "https://pharmeasy.in",
+    "logo": "https://pharmeasy.in/blog/wp-content/themes/Pharmeasy/assets/img/pe_logo.svg",
+    "_sameAs_note": "VERIFY these handles with the brand team before launch; wrong sameAs URLs hurt the knowledge graph.",
+    "sameAs": [
+      "https://www.facebook.com/PharmEasyApp",
+      "https://twitter.com/PharmEasyApp",
+      "https://www.instagram.com/pharmeasy",
+      "https://www.linkedin.com/company/pharmeasy",
+      "https://www.youtube.com/c/PharmEasy"
+    ]
+  },
+
+  "_env_note": "is_production is overridden by the SITE_ENV env var (production|staging) in build_site.py. Default is staging, which emits a Disallow-all robots.txt so the github.io origin is not indexed; canonical always points at base_url so any origin defers to the production URL.",
+  "is_production": false
+}

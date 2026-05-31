@@ -1,0 +1,62 @@
+name: Daily - Layer 1 breeding weather
+
+# Refreshes Layer 1 (Open-Meteo weather) every morning, re-bakes the static HTML,
+# commits the new data, and deploys. Open-Meteo needs no API key.
+
+on:
+  schedule:
+    - cron: "30 1 * * *"      # 07:00 IST (01:30 UTC) daily
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build Layer 1 (Open-Meteo)
+        run: python src/build_layer1.py --provider open-meteo
+
+      - name: Pre-render site
+        run: python src/build_site.py
+        env:
+          SITE_ENV: staging
+
+      - name: Commit refreshed data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/ index.html sitemap.xml robots.txt site.webmanifest
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore(data): daily Layer 1 weather refresh [skip ci]"
+            git pull --rebase --autostash origin main || true
+            git push
+          fi
+
+      - name: Assemble _site
+        run: |
+          mkdir -p _site
+          cp index.html robots.txt sitemap.xml site.webmanifest _site/
+          cp -r data assets _site/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deploy
+        uses: actions/deploy-pages@v4

@@ -1,8 +1,16 @@
 {
   "_comment": "Editable config for Layer 2 (Fever Signal). Search-term groups + the India state/UT list. Change freely; no code edits needed. Values are Google-Trends-style RELATIVE interest, normalized 0-100 (never absolute counts).",
-  "model_version": "L2-0.1.0",
+  "model_version": "L2-0.2.0",
   "geo": "IN",
   "lookback_weeks": 12,
+
+  "season": {
+    "_comment": "Year-over-year window. The build pulls ONE span query (last_year start to this_year end) per geo+group so both seasons share a single Google-Trends normalization, then slices them into two comparable monsoon seasons (start_month..end_month). Edit the years each season; 2025 is the historical reference, this_year fills in week by week.",
+    "this_year": 2026,
+    "last_year": 2025,
+    "start_month": 5,
+    "end_month": 10
+  },
 
   "groups": [
     {

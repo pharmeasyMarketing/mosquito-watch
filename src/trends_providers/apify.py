@@ -124,13 +124,15 @@ class ApifyTrendsProvider(TrendsProvider):
             run = get_json(RUN_STATUS_ENDPOINT.format(run_id=run_id), timeout=30, retries=2, headers=headers).get("data") or {}
         return run
 
-    def _run(self, terms: list[str], geo: str, weeks: int) -> dict:
+    def _run(self, terms, geo, weeks, date=None) -> dict:
         query = " + ".join(terms)          # Google Trends OR operator -> one series
-        tr = date_token(weeks)
+        is_span = bool(date and " " in str(date))
+        tr = str(date) if is_span else date_token(weeks)
         key = (query, geo, tr)
         if key in self._cache:
             return self._cache[key]
-        payload = {"searchTerms": [query], "geo": geo, "timeRange": tr}
+        payload = {"searchTerms": [query], "geo": geo}
+        payload["customTimeRange" if is_span else "timeRange"] = tr
         measured = [c["usd"] for c in self.run_costs if c.get("usd") is not None]
         need = max([self.est_run_cost_usd or 0.0] + measured)
 
@@ -170,8 +172,8 @@ class ApifyTrendsProvider(TrendsProvider):
             "switches": self.switch_log,
         }
 
-    def interest_over_time(self, terms, geo="IN", weeks=12):
-        item = self._run(terms, geo, weeks)
+    def interest_over_time(self, terms, geo="IN", weeks=12, date=None):
+        item = self._run(terms, geo, weeks, date=date)
         timeline = (
             item.get("interestOverTime_timelineData")
             or (item.get("interestOverTime") or {}).get("timelineData")
@@ -183,7 +185,9 @@ class ApifyTrendsProvider(TrendsProvider):
         weekly = to_weekly(pairs)
         if len(weekly) < 2:
             raise RuntimeError("Apify timeline did not resample to enough weekly points")
-        return weekly[-weeks:]
+        # A custom `date` span (year-over-year) keeps ALL weeks; the rolling
+        # weeks-based window truncates to the most recent `weeks`.
+        return weekly if date else weekly[-weeks:]
 
     def interest_by_region(self, terms, geo="IN", weeks=12, regions=None):
         item = self._run(terms, geo, weeks)

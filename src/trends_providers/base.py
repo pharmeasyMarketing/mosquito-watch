@@ -42,13 +42,16 @@ class TrendsProvider(ABC):
     is_sample: bool = False
 
     @abstractmethod
-    def interest_over_time(self, terms: list[str], geo: str = "IN", weeks: int = 12) -> list[TrendPoint]:
+    def interest_over_time(self, terms: list[str], geo: str = "IN", weeks: int = 12,
+                           date: str | None = None) -> list[TrendPoint]:
         """Weekly interest-over-time for the combined `terms`, oldest first.
 
         `terms` is a group's term list; providers OR them into one query
-        (Google Trends treats " + " as OR). Raise on a hard failure
-        (network/parse) so the orchestrator counts it as a failed group rather
-        than publishing garbage.
+        (Google Trends treats " + " as OR). `date`, when given, overrides the
+        weeks->window mapping with an explicit Google-Trends date token or custom
+        range (e.g. "2025-05-01 2026-10-31" for a year-over-year span). Raise on a
+        hard failure (network/parse) so the orchestrator counts it as a failed
+        group rather than publishing garbage.
         """
         raise NotImplementedError
 

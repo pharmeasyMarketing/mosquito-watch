@@ -7,6 +7,10 @@
 #   pytrends        # --provider pytrends  (unofficial, archived; imported lazily)
 #   # --provider serpapi needs no pip install, only a SERPAPI_KEY env var (stdlib HTTP)
 #
-# Future layers will add deps here, e.g.:
-#   pdfplumber      # Layer 3: parse IDSP weekly outbreak PDFs
-#   requests        # optional nicer HTTP if we outgrow urllib
+# Layer 3 (Confirmed Cases) also runs dependency-free on its DEFAULT `sample`
+# (synthetic) source. The REAL sources -- `fixture` (parse a saved IDSP PDF) and
+# `live` (download + parse the newest weekly PDF) -- need pdfplumber to read the
+# outbreak tables. Discovery + download stay stdlib-only (urllib via httputil),
+# so pdfplumber is the single heavy dependency, imported lazily so importing the
+# package never fails when it is absent.
+pdfplumber>=0.11   # Layer 3: parse IDSP weekly outbreak PDFs (fixture / live sources)

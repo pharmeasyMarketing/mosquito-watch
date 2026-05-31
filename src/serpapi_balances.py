@@ -53,8 +53,8 @@ def main() -> int:
 
     if known:
         print(f"\nTotal searches left across keys: {int(total_left)}")
-        print("At 8 searches/build that is about "
-              f"{int(total_left // 8)} more builds (daily ~30/mo, weekly ~4/mo).")
+        print(f"The year-over-year build uses ~88 searches (4 national + ~21 states x 4 diseases), "
+              f"so that is about {int(total_left // 88)} more builds. Run it weekly (~4/month, ~350/mo).")
     return 0
 
 
