@@ -629,7 +629,7 @@
 
   <!-- Three-layer causal chain -->
   <section class="chain" aria-label="The three-layer model">
-    <div class="layer active">
+    <div class="layer active" id="chain-l1">
       <span class="status freq">Updated daily</span>
       <span class="num">1</span>
       <div class="layer-h">Breeding Weather</div>
@@ -664,7 +664,7 @@
   </section>
 
   <!-- Layer 1: map -->
-  <section class="section">
+  <section class="section" id="breeding-weather">
     <div class="section-head layer-head l1">
       <h2><span class="layer-kicker">Layer 1</span>Breeding-favourability map</h2>
       <span class="tag" id="asof-tag">weather as of 2026-05-31</span>
@@ -958,6 +958,16 @@
   document.addEventListener("DOMContentLoaded", init);
 
   function init(){
+    // Chain card 1 (Breeding Weather) scrolls to its section, matching cards 2 and 3 (wired in
+    // flipChainCardL2 / flipChainCardL3). Its target section is static HTML, so wire it up front.
+    var c1 = document.getElementById("chain-l1");
+    if(c1){
+      c1.style.cursor = "pointer";
+      c1.addEventListener("click", function(){
+        var s = document.getElementById("breeding-weather");
+        if(s) s.scrollIntoView({behavior:"smooth"});
+      });
+    }
     initLayer2();   // independent of Layer 1; a Layer 2 failure must not break the page
     // Layer 3 sits below the fold and its data file is the largest, so fire it a beat
     // after Layer 1/2 to keep the single-threaded dev server from dropping a request in
