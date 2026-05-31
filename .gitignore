@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+
+# Logs / scratch output
+*.log
+
+# Secrets -- API tokens/keys for Layer 2 real providers (Apify, SerpApi, ...).
+# Put APIFY_TOKEN / SERPAPI_KEY here as KEY=value lines; never commit them.
+# `*.env` covers .env and apify.env; .env.example ends in .example so it stays tracked.
+.env
+*.env
+*.local.json
+.secrets/
+
+# NOTE: data/data.json is intentionally NOT ignored -- the GitHub Actions cron
+# commits the regenerated data file so the static dashboard can read it.

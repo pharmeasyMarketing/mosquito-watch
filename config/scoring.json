@@ -1,0 +1,53 @@
+{
+  "_comment": "Tunable parameters for the Layer 1 breeding-favorability formula. Change these and re-run; no code edits needed. See README.md > Methodology for the rationale behind each number.",
+  "model_version": "L1-0.2.0",
+
+  "windows": {
+    "_comment": "Day windows are measured in days-ago from the latest available observation (age 0 = most recent day).",
+    "current_days": 7,
+    "lag_start_day": 7,
+    "lag_end_day": 14
+  },
+
+  "temperature": {
+    "_comment": "Suitability is 0 below min_c, ramps to 1 across [min_c, opt_low_c], holds 1 across the optimal band, ramps back to 0 across [opt_high_c, max_c], and is 0 above max_c. Aedes/Anopheles breed fastest ~25-30C.",
+    "min_c": 18,
+    "opt_low_c": 25,
+    "opt_high_c": 30,
+    "max_c": 35
+  },
+
+  "humidity": {
+    "_comment": "Relative humidity favorability: 0 at/below low_pct, ramps to 1 at/above high_pct. RH >~60% extends mosquito lifespan and biting activity.",
+    "low_pct": 40,
+    "high_pct": 70
+  },
+
+  "rainfall": {
+    "_comment": "v2 (L1-0.2.0) rainfall suitability: S_R(R) = (1 - exp(-R/scale_mm)) * heavy-rain penalty, applied to both the recent and lagged rainfall totals. Moderate rain creates breeding habitats; rain above heavy_rain_threshold_mm is progressively discounted (flush-out effect), so the response is non-monotonic.",
+    "scale_mm": 30,
+    "heavy_rain_threshold_mm": 150,
+    "heavy_rain_decay_mm": 100
+  },
+
+  "weights": {
+    "_comment": "Weights for the in-temperature favorability blend. MUST sum to 1.0. Lagged rain carries the most weight because emergence lags rain by ~1-2 weeks. Temperature is applied separately as a limiting multiplier (see README).",
+    "humidity": 0.30,
+    "rain_recent": 0.25,
+    "rain_lagged": 0.45
+  },
+
+  "buckets": {
+    "_comment": "Lower bounds for each category on the 0-100 score. score < moderate = Low; [moderate, high) = Moderate; [high, very_high) = High; >= very_high = Very High.",
+    "moderate": 25,
+    "high": 50,
+    "very_high": 75
+  },
+
+  "sanity": {
+    "_comment": "Data-quality guard rails. The build aborts (writes nothing) if more than max_fail_fraction of cities fail to score, and flags any city whose mean temperature falls outside [plausible_temp_min_c, plausible_temp_max_c].",
+    "max_fail_fraction": 0.5,
+    "plausible_temp_min_c": -40,
+    "plausible_temp_max_c": 55
+  }
+}

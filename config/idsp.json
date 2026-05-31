@@ -1,0 +1,70 @@
+{
+  "_comment": "Editable config for Layer 3 (Confirmed Cases). Source = IDSP Weekly Outbreak Reports (Ministry of Health & Family Welfare). The live source discovers the newest weekly PDF from the listing page, downloads it (IDSP server or Google Drive), and parses the outbreak table. Change diseases/states/thresholds freely; no code edits needed. This is OFFICIAL reported outbreak data: authoritative, but it lags ~1-2 weeks and is under-reported. It validates the chain, it does not predict.",
+  "model_version": "L3-0.1.0",
+
+  "listing_url": "https://idsp.mohfw.gov.in/index4.php?lang=1&level=0&linkid=406&lid=3689",
+  "official_home": "https://idsp.mohfw.gov.in/",
+
+  "_manual_pdf_url_comment": "Optional hard override. If set (non-empty), the live source SKIPS listing-page discovery and downloads exactly this PDF (IDSP server or Google Drive share link both work). Use it to pin a specific week or to work around a discovery break. Leave empty for normal newest-week auto-discovery.",
+  "manual_pdf_url": "",
+
+  "_fixture_comment": "Saved real weekly PDF for the offline `fixture` source (regression-tests the real parser without network). Path is relative to the project root.",
+  "fixture_pdf": "tests/fixtures/idsp/idsp_2026_latest.pdf",
+
+  "_diseases_comment": "Target conditions to surface on the dashboard. `match` = case-insensitive substrings tested against the PDF's cleaned Disease/Illness text (any one hits). `match_all` = groups where EVERY token must be present (order-free) -- used for 'Fever with Rash' because government PDFs render it as 'Fever with Rash', 'Fever and Rash', 'Fever & Rash', or, when the wrap drops a word, plain 'Fever Rash'. The first target that matches wins; anything matching none is kept as disease_key='other' so the all-disease total stays honest, but only these five are highlighted. `headline` is shown first / used as the default sort.",
+  "diseases": [
+    { "key": "dengue",      "label": "Dengue",                "headline": true, "match": ["dengue"] },
+    { "key": "malaria",     "label": "Malaria",               "match": ["malaria"] },
+    { "key": "chikungunya", "label": "Chikungunya",           "match": ["chikungunya", "chikun"] },
+    { "key": "fever_rash",  "label": "Fever with Rash",       "match": [], "match_all": [["fever", "rash"]] },
+    { "key": "afi",         "label": "Acute Febrile Illness", "match": ["acute febrile", "febrile illness"], "match_all": [["acute", "febrile"]] }
+  ],
+
+  "_states_comment": "India states + union territories. Used to normalize the messy state text the PDF parser pulls out (government PDFs wrap names mid-word, e.g. 'Chhattisg arh'), by matching on a space/punctuation-insensitive key. Same list as Layer 1/2. `code` is the ISO 3166-2:IN sub-region code; `idsp` is the 2-letter prefix IDSP uses inside its outbreak IDs (State/District/Year/Week/number) where known -- used only as a low-confidence fallback when the state text cannot be matched (IDSP's own prefixes are occasionally inconsistent, so parsed text always wins).",
+  "states": [
+    { "name": "Andhra Pradesh",                           "code": "IN-AP", "idsp": "AP" },
+    { "name": "Arunachal Pradesh",                         "code": "IN-AR", "idsp": "AR" },
+    { "name": "Assam",                                     "code": "IN-AS", "idsp": "AS" },
+    { "name": "Bihar",                                     "code": "IN-BR", "idsp": "BH" },
+    { "name": "Chhattisgarh",                              "code": "IN-CT", "idsp": "CT" },
+    { "name": "Goa",                                       "code": "IN-GA", "idsp": "GA" },
+    { "name": "Gujarat",                                   "code": "IN-GJ", "idsp": "GJ" },
+    { "name": "Haryana",                                   "code": "IN-HR", "idsp": "HR" },
+    { "name": "Himachal Pradesh",                          "code": "IN-HP", "idsp": "HP" },
+    { "name": "Jharkhand",                                 "code": "IN-JH", "idsp": "JH" },
+    { "name": "Karnataka",                                 "code": "IN-KA", "idsp": "KN" },
+    { "name": "Kerala",                                    "code": "IN-KL", "idsp": "KL" },
+    { "name": "Madhya Pradesh",                            "code": "IN-MP", "idsp": "MP" },
+    { "name": "Maharashtra",                               "code": "IN-MH", "idsp": "MH" },
+    { "name": "Manipur",                                   "code": "IN-MN", "idsp": "MN" },
+    { "name": "Meghalaya",                                 "code": "IN-ML", "idsp": "ML" },
+    { "name": "Mizoram",                                   "code": "IN-MZ", "idsp": "MZ" },
+    { "name": "Nagaland",                                  "code": "IN-NL", "idsp": "NL" },
+    { "name": "Odisha",                                    "code": "IN-OR", "idsp": "OR" },
+    { "name": "Punjab",                                    "code": "IN-PB", "idsp": "PB" },
+    { "name": "Rajasthan",                                 "code": "IN-RJ", "idsp": "RJ" },
+    { "name": "Sikkim",                                    "code": "IN-SK", "idsp": "SK" },
+    { "name": "Tamil Nadu",                                "code": "IN-TN", "idsp": "TN" },
+    { "name": "Telangana",                                 "code": "IN-TG", "idsp": "TL" },
+    { "name": "Tripura",                                   "code": "IN-TR", "idsp": "TR" },
+    { "name": "Uttar Pradesh",                             "code": "IN-UP", "idsp": "UP" },
+    { "name": "Uttarakhand",                               "code": "IN-UT", "idsp": "UK" },
+    { "name": "West Bengal",                               "code": "IN-WB", "idsp": "WB" },
+    { "name": "Andaman and Nicobar Islands",               "code": "IN-AN", "idsp": "AN" },
+    { "name": "Chandigarh",                                "code": "IN-CH", "idsp": "CH" },
+    { "name": "Dadra and Nagar Haveli and Daman and Diu",  "code": "IN-DH", "idsp": "DD" },
+    { "name": "Delhi",                                     "code": "IN-DL", "idsp": "DL" },
+    { "name": "Jammu and Kashmir",                         "code": "IN-JK", "idsp": "JK" },
+    { "name": "Ladakh",                                    "code": "IN-LA", "idsp": "LA" },
+    { "name": "Lakshadweep",                               "code": "IN-LD", "idsp": "LD" },
+    { "name": "Puducherry",                                "code": "IN-PY", "idsp": "PY" }
+  ],
+
+  "sanity": {
+    "_comment": "MANDATORY data-quality guard (the single most important Layer 3 requirement). Because we parse government PDFs whose format drifts week to week, the build ABORTS and writes nothing if the parse looks broken: fewer than min_outbreaks total outbreak rows recovered, no Unique-ID anchors found at all (min_id_anchors), or no reporting week identified (require_report_week). A format change must NEVER silently feed a branded dashboard. min_target_outbreaks can be 0: a real quiet week may legitimately have no dengue/malaria/chikungunya/fever-rash/AFI outbreak, and that is not a parser failure.",
+    "min_outbreaks": 5,
+    "min_id_anchors": 5,
+    "min_target_outbreaks": 0,
+    "require_report_week": true
+  }
+}

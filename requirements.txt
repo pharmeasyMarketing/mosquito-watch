@@ -1,0 +1,12 @@
+# Layer 1 (Breeding Risk) has ZERO third-party dependencies -- it runs on a
+# bare Python 3.9+ install using only the standard library (urllib, json,
+# datetime). This keeps the free GitHub Actions cron trivial to set up.
+#
+# Layer 2 (Fever Signal) also runs dependency-free on its DEFAULT mock/sample
+# provider. The real providers add deps only if you actually select them:
+#   pytrends        # --provider pytrends  (unofficial, archived; imported lazily)
+#   # --provider serpapi needs no pip install, only a SERPAPI_KEY env var (stdlib HTTP)
+#
+# Future layers will add deps here, e.g.:
+#   pdfplumber      # Layer 3: parse IDSP weekly outbreak PDFs
+#   requests        # optional nicer HTTP if we outgrow urllib

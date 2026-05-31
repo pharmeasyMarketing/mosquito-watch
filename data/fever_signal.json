@@ -1,0 +1,1248 @@
+{
+  "layer": 2,
+  "layer_name": "Fever Signal (search attention)",
+  "model_version": "L2-0.1.0",
+  "generated_at": "2026-05-31T10:18:37+00:00",
+  "provider": "serpapi",
+  "attribution": "Google Trends via SerpApi",
+  "is_sample": false,
+  "disclaimer": "Search attention only. This shows how often people look up fever and symptom terms, not how many people are ill and not confirmed cases. Values are relative and normalized from 0 to 100, not absolute counts. A single news story can lift searches everywhere at once. Weather temperature is not the same thing as a body-temperature fever. Read this alongside official surveillance, never as a diagnosis.",
+  "geo": "IN",
+  "lookback_weeks": 12,
+  "headline_group": "febrile",
+  "groups": [
+    {
+      "key": "febrile",
+      "label": "Fever",
+      "disease": "General febrile illness",
+      "terms": [
+        "fever",
+        "viral fever",
+        "body ache",
+        "high temperature"
+      ],
+      "headline": true
+    },
+    {
+      "key": "dengue",
+      "label": "Dengue",
+      "disease": "Dengue",
+      "terms": [
+        "dengue symptoms",
+        "dengue test",
+        "platelet count"
+      ],
+      "headline": false
+    },
+    {
+      "key": "malaria",
+      "label": "Malaria",
+      "disease": "Malaria",
+      "terms": [
+        "malaria symptoms",
+        "malaria test"
+      ],
+      "headline": false
+    },
+    {
+      "key": "chikungunya",
+      "label": "Chikungunya",
+      "disease": "Chikungunya",
+      "terms": [
+        "chikungunya",
+        "joint pain fever"
+      ],
+      "headline": false
+    }
+  ],
+  "group_count": 4,
+  "state_count": 35,
+  "city_count": 32,
+  "failed_count": 0,
+  "failures": [],
+  "national_trend": [
+    {
+      "key": "febrile",
+      "label": "Fever",
+      "disease": "General febrile illness",
+      "terms": [
+        "fever",
+        "viral fever",
+        "body ache",
+        "high temperature"
+      ],
+      "headline": true,
+      "points": [
+        {
+          "date": "2026-03-09",
+          "value": 86.1
+        },
+        {
+          "date": "2026-03-16",
+          "value": 79.7
+        },
+        {
+          "date": "2026-03-23",
+          "value": 80.1
+        },
+        {
+          "date": "2026-03-30",
+          "value": 75.6
+        },
+        {
+          "date": "2026-04-06",
+          "value": 75.7
+        },
+        {
+          "date": "2026-04-13",
+          "value": 78.1
+        },
+        {
+          "date": "2026-04-20",
+          "value": 77.6
+        },
+        {
+          "date": "2026-04-27",
+          "value": 74.6
+        },
+        {
+          "date": "2026-05-04",
+          "value": 73.3
+        },
+        {
+          "date": "2026-05-11",
+          "value": 76.6
+        },
+        {
+          "date": "2026-05-18",
+          "value": 75.3
+        },
+        {
+          "date": "2026-05-25",
+          "value": 71.9
+        }
+      ],
+      "latest": 71.9,
+      "delta_4w": -2.7
+    },
+    {
+      "key": "dengue",
+      "label": "Dengue",
+      "disease": "Dengue",
+      "terms": [
+        "dengue symptoms",
+        "dengue test",
+        "platelet count"
+      ],
+      "headline": false,
+      "points": [
+        {
+          "date": "2026-03-09",
+          "value": 86.7
+        },
+        {
+          "date": "2026-03-16",
+          "value": 77.6
+        },
+        {
+          "date": "2026-03-23",
+          "value": 84.9
+        },
+        {
+          "date": "2026-03-30",
+          "value": 79.6
+        },
+        {
+          "date": "2026-04-06",
+          "value": 75.1
+        },
+        {
+          "date": "2026-04-13",
+          "value": 69.9
+        },
+        {
+          "date": "2026-04-20",
+          "value": 65.4
+        },
+        {
+          "date": "2026-04-27",
+          "value": 67.7
+        },
+        {
+          "date": "2026-05-04",
+          "value": 70.9
+        },
+        {
+          "date": "2026-05-11",
+          "value": 71.1
+        },
+        {
+          "date": "2026-05-18",
+          "value": 69.3
+        },
+        {
+          "date": "2026-05-25",
+          "value": 67.3
+        }
+      ],
+      "latest": 67.3,
+      "delta_4w": -0.4
+    },
+    {
+      "key": "malaria",
+      "label": "Malaria",
+      "disease": "Malaria",
+      "terms": [
+        "malaria symptoms",
+        "malaria test"
+      ],
+      "headline": false,
+      "points": [
+        {
+          "date": "2026-03-09",
+          "value": 59.0
+        },
+        {
+          "date": "2026-03-16",
+          "value": 54.0
+        },
+        {
+          "date": "2026-03-23",
+          "value": 60.3
+        },
+        {
+          "date": "2026-03-30",
+          "value": 47.1
+        },
+        {
+          "date": "2026-04-06",
+          "value": 55.0
+        },
+        {
+          "date": "2026-04-13",
+          "value": 35.1
+        },
+        {
+          "date": "2026-04-20",
+          "value": 45.7
+        },
+        {
+          "date": "2026-04-27",
+          "value": 44.0
+        },
+        {
+          "date": "2026-05-04",
+          "value": 36.1
+        },
+        {
+          "date": "2026-05-11",
+          "value": 41.9
+        },
+        {
+          "date": "2026-05-18",
+          "value": 33.1
+        },
+        {
+          "date": "2026-05-25",
+          "value": 34.1
+        }
+      ],
+      "latest": 34.1,
+      "delta_4w": -9.9
+    },
+    {
+      "key": "chikungunya",
+      "label": "Chikungunya",
+      "disease": "Chikungunya",
+      "terms": [
+        "chikungunya",
+        "joint pain fever"
+      ],
+      "headline": false,
+      "points": [
+        {
+          "date": "2026-03-09",
+          "value": 43.9
+        },
+        {
+          "date": "2026-03-16",
+          "value": 52.7
+        },
+        {
+          "date": "2026-03-23",
+          "value": 41.9
+        },
+        {
+          "date": "2026-03-30",
+          "value": 36.3
+        },
+        {
+          "date": "2026-04-06",
+          "value": 32.0
+        },
+        {
+          "date": "2026-04-13",
+          "value": 38.7
+        },
+        {
+          "date": "2026-04-20",
+          "value": 35.7
+        },
+        {
+          "date": "2026-04-27",
+          "value": 36.3
+        },
+        {
+          "date": "2026-05-04",
+          "value": 36.3
+        },
+        {
+          "date": "2026-05-11",
+          "value": 24.4
+        },
+        {
+          "date": "2026-05-18",
+          "value": 24.7
+        },
+        {
+          "date": "2026-05-25",
+          "value": 23.9
+        }
+      ],
+      "latest": 23.9,
+      "delta_4w": -12.4
+    }
+  ],
+  "by_state": [
+    {
+      "state": "Nagaland",
+      "code": "IN-NL",
+      "groups": {
+        "febrile": 100.0,
+        "dengue": 10.0,
+        "malaria": 11.0
+      },
+      "headline": 100.0,
+      "max_value": 100.0,
+      "top_group": "febrile"
+    },
+    {
+      "state": "Sikkim",
+      "code": "IN-SK",
+      "groups": {
+        "febrile": 88.0,
+        "dengue": 11.0
+      },
+      "headline": 88.0,
+      "max_value": 88.0,
+      "top_group": "febrile"
+    },
+    {
+      "state": "Manipur",
+      "code": "IN-MN",
+      "groups": {
+        "febrile": 87.0,
+        "dengue": 100.0,
+        "malaria": 100.0,
+        "chikungunya": 10.0
+      },
+      "headline": 87.0,
+      "max_value": 100.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Meghalaya",
+      "code": "IN-ML",
+      "groups": {
+        "febrile": 65.0,
+        "dengue": 34.0,
+        "malaria": 5.0,
+        "chikungunya": 100.0
+      },
+      "headline": 65.0,
+      "max_value": 100.0,
+      "top_group": "chikungunya"
+    },
+    {
+      "state": "Mizoram",
+      "code": "IN-MZ",
+      "groups": {
+        "febrile": 65.0,
+        "dengue": 17.0,
+        "malaria": 7.0
+      },
+      "headline": 65.0,
+      "max_value": 65.0,
+      "top_group": "febrile"
+    },
+    {
+      "state": "Puducherry",
+      "code": "IN-PY",
+      "groups": {
+        "febrile": 58.0,
+        "dengue": 69.0
+      },
+      "headline": 58.0,
+      "max_value": 69.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Arunachal Pradesh",
+      "code": "IN-AR",
+      "groups": {
+        "febrile": 52.0,
+        "dengue": 7.0
+      },
+      "headline": 52.0,
+      "max_value": 52.0,
+      "top_group": "febrile"
+    },
+    {
+      "state": "Jammu and Kashmir",
+      "code": "IN-JK",
+      "groups": {
+        "febrile": 50.0,
+        "dengue": 80.0,
+        "malaria": 1.0,
+        "chikungunya": 45.0
+      },
+      "headline": 50.0,
+      "max_value": 80.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Goa",
+      "code": "IN-GA",
+      "groups": {
+        "febrile": 47.0,
+        "dengue": 57.0,
+        "malaria": 3.0,
+        "chikungunya": 4.0
+      },
+      "headline": 47.0,
+      "max_value": 57.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Karnataka",
+      "code": "IN-KA",
+      "groups": {
+        "febrile": 47.0,
+        "dengue": 56.0,
+        "malaria": 16.0,
+        "chikungunya": 37.0
+      },
+      "headline": 47.0,
+      "max_value": 56.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Punjab",
+      "code": "IN-PB",
+      "groups": {
+        "febrile": 47.0,
+        "dengue": 64.0,
+        "malaria": 27.0,
+        "chikungunya": 58.0
+      },
+      "headline": 47.0,
+      "max_value": 64.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Tamil Nadu",
+      "code": "IN-TN",
+      "groups": {
+        "febrile": 46.0,
+        "dengue": 61.0,
+        "malaria": 17.0,
+        "chikungunya": 33.0
+      },
+      "headline": 46.0,
+      "max_value": 61.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Andaman and Nicobar Islands",
+      "code": "IN-AN",
+      "groups": {
+        "febrile": 46.0
+      },
+      "headline": 46.0,
+      "max_value": 46.0,
+      "top_group": "febrile"
+    },
+    {
+      "state": "Chandigarh",
+      "code": "IN-CH",
+      "groups": {
+        "febrile": 46.0,
+        "dengue": 89.0,
+        "malaria": 3.0,
+        "chikungunya": 4.0
+      },
+      "headline": 46.0,
+      "max_value": 89.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Delhi",
+      "code": "IN-DL",
+      "groups": {
+        "febrile": 46.0,
+        "dengue": 53.0,
+        "malaria": 32.0,
+        "chikungunya": 47.0
+      },
+      "headline": 46.0,
+      "max_value": 53.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Andhra Pradesh",
+      "code": "IN-AP",
+      "groups": {
+        "febrile": 44.0,
+        "dengue": 39.0,
+        "malaria": 16.0,
+        "chikungunya": 27.0
+      },
+      "headline": 44.0,
+      "max_value": 44.0,
+      "top_group": "febrile"
+    },
+    {
+      "state": "Daman and Diu",
+      "code": "IN-DD",
+      "groups": {
+        "febrile": 44.0
+      },
+      "headline": 44.0,
+      "max_value": 44.0,
+      "top_group": "febrile"
+    },
+    {
+      "state": "Kerala",
+      "code": "IN-KL",
+      "groups": {
+        "febrile": 41.0,
+        "dengue": 77.0,
+        "malaria": 14.0,
+        "chikungunya": 46.0
+      },
+      "headline": 41.0,
+      "max_value": 77.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Telangana",
+      "code": "IN-TG",
+      "groups": {
+        "febrile": 41.0,
+        "dengue": 46.0,
+        "malaria": 17.0,
+        "chikungunya": 28.0
+      },
+      "headline": 41.0,
+      "max_value": 46.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Himachal Pradesh",
+      "code": "IN-HP",
+      "groups": {
+        "febrile": 40.0,
+        "dengue": 53.0,
+        "malaria": 34.0,
+        "chikungunya": 48.0
+      },
+      "headline": 40.0,
+      "max_value": 53.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Tripura",
+      "code": "IN-TR",
+      "groups": {
+        "febrile": 39.0,
+        "dengue": 44.0,
+        "malaria": 5.0
+      },
+      "headline": 39.0,
+      "max_value": 44.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Haryana",
+      "code": "IN-HR",
+      "groups": {
+        "febrile": 38.0,
+        "dengue": 41.0,
+        "malaria": 22.0,
+        "chikungunya": 37.0
+      },
+      "headline": 38.0,
+      "max_value": 41.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Uttarakhand",
+      "code": "IN-UT",
+      "groups": {
+        "febrile": 38.0,
+        "dengue": 43.0,
+        "malaria": 25.0,
+        "chikungunya": 45.0
+      },
+      "headline": 38.0,
+      "max_value": 45.0,
+      "top_group": "chikungunya"
+    },
+    {
+      "state": "Uttar Pradesh",
+      "code": "IN-UP",
+      "groups": {
+        "febrile": 36.0,
+        "dengue": 37.0,
+        "malaria": 25.0,
+        "chikungunya": 43.0
+      },
+      "headline": 36.0,
+      "max_value": 43.0,
+      "top_group": "chikungunya"
+    },
+    {
+      "state": "Assam",
+      "code": "IN-AS",
+      "groups": {
+        "febrile": 31.0,
+        "dengue": 34.0,
+        "malaria": 27.0,
+        "chikungunya": 24.0
+      },
+      "headline": 31.0,
+      "max_value": 34.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Maharashtra",
+      "code": "IN-MH",
+      "groups": {
+        "febrile": 31.0,
+        "dengue": 43.0,
+        "malaria": 21.0,
+        "chikungunya": 36.0
+      },
+      "headline": 31.0,
+      "max_value": 43.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "West Bengal",
+      "code": "IN-WB",
+      "groups": {
+        "febrile": 31.0,
+        "dengue": 40.0,
+        "malaria": 23.0,
+        "chikungunya": 16.0
+      },
+      "headline": 31.0,
+      "max_value": 40.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Bihar",
+      "code": "IN-BR",
+      "groups": {
+        "febrile": 30.0,
+        "dengue": 32.0,
+        "malaria": 21.0,
+        "chikungunya": 21.0
+      },
+      "headline": 30.0,
+      "max_value": 32.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Jharkhand",
+      "code": "IN-JH",
+      "groups": {
+        "febrile": 30.0,
+        "dengue": 31.0,
+        "malaria": 28.0,
+        "chikungunya": 19.0
+      },
+      "headline": 30.0,
+      "max_value": 31.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Odisha",
+      "code": "IN-OR",
+      "groups": {
+        "febrile": 28.0,
+        "dengue": 36.0,
+        "malaria": 28.0,
+        "chikungunya": 24.0
+      },
+      "headline": 28.0,
+      "max_value": 36.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Chhattisgarh",
+      "code": "IN-CT",
+      "groups": {
+        "febrile": 24.0,
+        "dengue": 39.0,
+        "malaria": 30.0,
+        "chikungunya": 38.0
+      },
+      "headline": 24.0,
+      "max_value": 39.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Gujarat",
+      "code": "IN-GJ",
+      "groups": {
+        "febrile": 24.0,
+        "dengue": 36.0,
+        "malaria": 13.0,
+        "chikungunya": 26.0
+      },
+      "headline": 24.0,
+      "max_value": 36.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Dadra and Nagar Haveli",
+      "code": "IN-DN",
+      "groups": {
+        "febrile": 23.0
+      },
+      "headline": 23.0,
+      "max_value": 23.0,
+      "top_group": "febrile"
+    },
+    {
+      "state": "Madhya Pradesh",
+      "code": "IN-MP",
+      "groups": {
+        "febrile": 22.0,
+        "dengue": 26.0,
+        "malaria": 14.0,
+        "chikungunya": 25.0
+      },
+      "headline": 22.0,
+      "max_value": 26.0,
+      "top_group": "dengue"
+    },
+    {
+      "state": "Rajasthan",
+      "code": "IN-RJ",
+      "groups": {
+        "febrile": 22.0,
+        "dengue": 28.0,
+        "malaria": 17.0,
+        "chikungunya": 28.0
+      },
+      "headline": 22.0,
+      "max_value": 28.0,
+      "top_group": "dengue"
+    }
+  ],
+  "by_city": [
+    {
+      "name": "Srinagar",
+      "state": "Jammu & Kashmir",
+      "lat": 34.0837,
+      "lon": 74.7973,
+      "groups": {
+        "febrile": 50.0,
+        "dengue": 80.0,
+        "malaria": 1.0,
+        "chikungunya": 45.0
+      },
+      "headline": 50.0,
+      "max_value": 80.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Bengaluru",
+      "state": "Karnataka",
+      "lat": 12.9716,
+      "lon": 77.5946,
+      "groups": {
+        "febrile": 47.0,
+        "dengue": 56.0,
+        "malaria": 16.0,
+        "chikungunya": 37.0
+      },
+      "headline": 47.0,
+      "max_value": 56.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Amritsar",
+      "state": "Punjab",
+      "lat": 31.634,
+      "lon": 74.8723,
+      "groups": {
+        "febrile": 47.0,
+        "dengue": 64.0,
+        "malaria": 27.0,
+        "chikungunya": 58.0
+      },
+      "headline": 47.0,
+      "max_value": 64.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Delhi",
+      "state": "Delhi",
+      "lat": 28.6139,
+      "lon": 77.209,
+      "groups": {
+        "febrile": 46.0,
+        "dengue": 53.0,
+        "malaria": 32.0,
+        "chikungunya": 47.0
+      },
+      "headline": 46.0,
+      "max_value": 53.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Chennai",
+      "state": "Tamil Nadu",
+      "lat": 13.0827,
+      "lon": 80.2707,
+      "groups": {
+        "febrile": 46.0,
+        "dengue": 61.0,
+        "malaria": 17.0,
+        "chikungunya": 33.0
+      },
+      "headline": 46.0,
+      "max_value": 61.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Coimbatore",
+      "state": "Tamil Nadu",
+      "lat": 11.0168,
+      "lon": 76.9558,
+      "groups": {
+        "febrile": 46.0,
+        "dengue": 61.0,
+        "malaria": 17.0,
+        "chikungunya": 33.0
+      },
+      "headline": 46.0,
+      "max_value": 61.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Madurai",
+      "state": "Tamil Nadu",
+      "lat": 9.9252,
+      "lon": 78.1198,
+      "groups": {
+        "febrile": 46.0,
+        "dengue": 61.0,
+        "malaria": 17.0,
+        "chikungunya": 33.0
+      },
+      "headline": 46.0,
+      "max_value": 61.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Chandigarh",
+      "state": "Chandigarh",
+      "lat": 30.7333,
+      "lon": 76.7794,
+      "groups": {
+        "febrile": 46.0,
+        "dengue": 89.0,
+        "malaria": 3.0,
+        "chikungunya": 4.0
+      },
+      "headline": 46.0,
+      "max_value": 89.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Visakhapatnam",
+      "state": "Andhra Pradesh",
+      "lat": 17.6868,
+      "lon": 83.2185,
+      "groups": {
+        "febrile": 44.0,
+        "dengue": 39.0,
+        "malaria": 16.0,
+        "chikungunya": 27.0
+      },
+      "headline": 44.0,
+      "max_value": 44.0,
+      "top_group": "febrile"
+    },
+    {
+      "name": "Hyderabad",
+      "state": "Telangana",
+      "lat": 17.385,
+      "lon": 78.4867,
+      "groups": {
+        "febrile": 41.0,
+        "dengue": 46.0,
+        "malaria": 17.0,
+        "chikungunya": 28.0
+      },
+      "headline": 41.0,
+      "max_value": 46.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Kochi",
+      "state": "Kerala",
+      "lat": 9.9312,
+      "lon": 76.2673,
+      "groups": {
+        "febrile": 41.0,
+        "dengue": 77.0,
+        "malaria": 14.0,
+        "chikungunya": 46.0
+      },
+      "headline": 41.0,
+      "max_value": 77.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Thiruvananthapuram",
+      "state": "Kerala",
+      "lat": 8.5241,
+      "lon": 76.9366,
+      "groups": {
+        "febrile": 41.0,
+        "dengue": 77.0,
+        "malaria": 14.0,
+        "chikungunya": 46.0
+      },
+      "headline": 41.0,
+      "max_value": 77.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Shimla",
+      "state": "Himachal Pradesh",
+      "lat": 31.1048,
+      "lon": 77.1734,
+      "groups": {
+        "febrile": 40.0,
+        "dengue": 53.0,
+        "malaria": 34.0,
+        "chikungunya": 48.0
+      },
+      "headline": 40.0,
+      "max_value": 53.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Lucknow",
+      "state": "Uttar Pradesh",
+      "lat": 26.8467,
+      "lon": 80.9462,
+      "groups": {
+        "febrile": 36.0,
+        "dengue": 37.0,
+        "malaria": 25.0,
+        "chikungunya": 43.0
+      },
+      "headline": 36.0,
+      "max_value": 43.0,
+      "top_group": "chikungunya"
+    },
+    {
+      "name": "Kanpur",
+      "state": "Uttar Pradesh",
+      "lat": 26.4499,
+      "lon": 80.3319,
+      "groups": {
+        "febrile": 36.0,
+        "dengue": 37.0,
+        "malaria": 25.0,
+        "chikungunya": 43.0
+      },
+      "headline": 36.0,
+      "max_value": 43.0,
+      "top_group": "chikungunya"
+    },
+    {
+      "name": "Varanasi",
+      "state": "Uttar Pradesh",
+      "lat": 25.3176,
+      "lon": 82.9739,
+      "groups": {
+        "febrile": 36.0,
+        "dengue": 37.0,
+        "malaria": 25.0,
+        "chikungunya": 43.0
+      },
+      "headline": 36.0,
+      "max_value": 43.0,
+      "top_group": "chikungunya"
+    },
+    {
+      "name": "Mumbai",
+      "state": "Maharashtra",
+      "lat": 19.076,
+      "lon": 72.8777,
+      "groups": {
+        "febrile": 31.0,
+        "dengue": 43.0,
+        "malaria": 21.0,
+        "chikungunya": 36.0
+      },
+      "headline": 31.0,
+      "max_value": 43.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Kolkata",
+      "state": "West Bengal",
+      "lat": 22.5726,
+      "lon": 88.3639,
+      "groups": {
+        "febrile": 31.0,
+        "dengue": 40.0,
+        "malaria": 23.0,
+        "chikungunya": 16.0
+      },
+      "headline": 31.0,
+      "max_value": 40.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Pune",
+      "state": "Maharashtra",
+      "lat": 18.5204,
+      "lon": 73.8567,
+      "groups": {
+        "febrile": 31.0,
+        "dengue": 43.0,
+        "malaria": 21.0,
+        "chikungunya": 36.0
+      },
+      "headline": 31.0,
+      "max_value": 43.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Nagpur",
+      "state": "Maharashtra",
+      "lat": 21.1458,
+      "lon": 79.0882,
+      "groups": {
+        "febrile": 31.0,
+        "dengue": 43.0,
+        "malaria": 21.0,
+        "chikungunya": 36.0
+      },
+      "headline": 31.0,
+      "max_value": 43.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Guwahati",
+      "state": "Assam",
+      "lat": 26.1445,
+      "lon": 91.7362,
+      "groups": {
+        "febrile": 31.0,
+        "dengue": 34.0,
+        "malaria": 27.0,
+        "chikungunya": 24.0
+      },
+      "headline": 31.0,
+      "max_value": 34.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Nashik",
+      "state": "Maharashtra",
+      "lat": 19.9975,
+      "lon": 73.7898,
+      "groups": {
+        "febrile": 31.0,
+        "dengue": 43.0,
+        "malaria": 21.0,
+        "chikungunya": 36.0
+      },
+      "headline": 31.0,
+      "max_value": 43.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Patna",
+      "state": "Bihar",
+      "lat": 25.5941,
+      "lon": 85.1376,
+      "groups": {
+        "febrile": 30.0,
+        "dengue": 32.0,
+        "malaria": 21.0,
+        "chikungunya": 21.0
+      },
+      "headline": 30.0,
+      "max_value": 32.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Ranchi",
+      "state": "Jharkhand",
+      "lat": 23.3441,
+      "lon": 85.3096,
+      "groups": {
+        "febrile": 30.0,
+        "dengue": 31.0,
+        "malaria": 28.0,
+        "chikungunya": 19.0
+      },
+      "headline": 30.0,
+      "max_value": 31.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Bhubaneswar",
+      "state": "Odisha",
+      "lat": 20.2961,
+      "lon": 85.8245,
+      "groups": {
+        "febrile": 28.0,
+        "dengue": 36.0,
+        "malaria": 28.0,
+        "chikungunya": 24.0
+      },
+      "headline": 28.0,
+      "max_value": 36.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Ahmedabad",
+      "state": "Gujarat",
+      "lat": 23.0225,
+      "lon": 72.5714,
+      "groups": {
+        "febrile": 24.0,
+        "dengue": 36.0,
+        "malaria": 13.0,
+        "chikungunya": 26.0
+      },
+      "headline": 24.0,
+      "max_value": 36.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Surat",
+      "state": "Gujarat",
+      "lat": 21.1702,
+      "lon": 72.8311,
+      "groups": {
+        "febrile": 24.0,
+        "dengue": 36.0,
+        "malaria": 13.0,
+        "chikungunya": 26.0
+      },
+      "headline": 24.0,
+      "max_value": 36.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Raipur",
+      "state": "Chhattisgarh",
+      "lat": 21.2514,
+      "lon": 81.6296,
+      "groups": {
+        "febrile": 24.0,
+        "dengue": 39.0,
+        "malaria": 30.0,
+        "chikungunya": 38.0
+      },
+      "headline": 24.0,
+      "max_value": 39.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Jaipur",
+      "state": "Rajasthan",
+      "lat": 26.9124,
+      "lon": 75.7873,
+      "groups": {
+        "febrile": 22.0,
+        "dengue": 28.0,
+        "malaria": 17.0,
+        "chikungunya": 28.0
+      },
+      "headline": 22.0,
+      "max_value": 28.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Indore",
+      "state": "Madhya Pradesh",
+      "lat": 22.7196,
+      "lon": 75.8577,
+      "groups": {
+        "febrile": 22.0,
+        "dengue": 26.0,
+        "malaria": 14.0,
+        "chikungunya": 25.0
+      },
+      "headline": 22.0,
+      "max_value": 26.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Bhopal",
+      "state": "Madhya Pradesh",
+      "lat": 23.2599,
+      "lon": 77.4126,
+      "groups": {
+        "febrile": 22.0,
+        "dengue": 26.0,
+        "malaria": 14.0,
+        "chikungunya": 25.0
+      },
+      "headline": 22.0,
+      "max_value": 26.0,
+      "top_group": "dengue"
+    },
+    {
+      "name": "Jodhpur",
+      "state": "Rajasthan",
+      "lat": 26.2389,
+      "lon": 73.0243,
+      "groups": {
+        "febrile": 22.0,
+        "dengue": 28.0,
+        "malaria": 17.0,
+        "chikungunya": 28.0
+      },
+      "headline": 22.0,
+      "max_value": 28.0,
+      "top_group": "dengue"
+    }
+  ],
+  "provider_meta": {
+    "keys_configured": 2,
+    "keys_used": [
+      "9dc33dc4aa...3919"
+    ],
+    "searches_total": 8,
+    "searches_by_key": {
+      "9dc33dc4aa...3919": 8
+    },
+    "switches": []
+  }
+}

@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mosquito Watch | PharmEasy Health Insights</title>
+<meta name="description" content="Mosquito Watch follows mosquito-borne disease across India through three signals: breeding weather, fever searches, and confirmed cases. A weather-based screening guide, not a case forecast or medical advice." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+<style>
+  :root{
+    /* PharmEasy brand */
+    --pe-teal:#10847E; --pe-teal-dark:#0C6E69; --pe-teal-darker:#0a5d59;
+    --pe-tint:#e7f3f2; --pe-tint-2:#f1f8f7;
+    --accent:var(--pe-teal);
+    --bg:#f4f6f8; --card:#ffffff; --ink:#1f2933; --text:#40464d; --muted:#6e787e; --line:#e4e8ed;
+    /* risk scale (kept distinct from brand teal; legend always shown) */
+    --low:#2b9348; --moderate:#f4b400; --high:#f57c00; --veryhigh:#d62828;
+    --shadow:0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.08);
+    --font:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:var(--font); background:var(--bg); color:var(--text); line-height:1.5; -webkit-font-smoothing:antialiased}
+  a{color:var(--pe-teal)}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 18px}
+
+  /* ---- PharmEasy-style two-tier header ---- */
+  header.site{position:sticky; top:0; z-index:1200}
+  .pe-topbar{background:var(--pe-teal)}
+  .pe-topbar-in{display:flex; align-items:center; justify-content:space-between; height:60px}
+  .pe-logo{display:flex; align-items:center; gap:9px; text-decoration:none}
+  .pe-mark{width:26px; height:26px; flex:none}
+  .pe-logo-img{height:26px; width:auto; display:block}
+  .pe-word{font-family:var(--font); font-weight:800; font-size:23px; letter-spacing:-.5px; color:#fff; line-height:1}
+  .pe-topnav{display:flex; align-items:center; gap:18px}
+  .pe-topnav a{color:#fff; text-decoration:none; font-size:13.5px; font-weight:600; opacity:.95}
+  .pe-topnav a:hover{opacity:1; text-decoration:underline}
+  .pe-tag{color:#eafffb; border:1px solid rgba(255,255,255,.45); padding:4px 11px; border-radius:999px; font-size:12.5px; font-weight:600}
+  .pe-subbar{background:var(--card); border-bottom:1px solid var(--line); box-shadow:0 2px 3px rgba(16,24,40,.05)}
+  .head-row{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; padding:14px 18px}
+  .brand h1{margin:0; font-size:23px; font-weight:800; letter-spacing:-.4px; color:var(--ink)}
+  .brand h1 .ix{color:var(--pe-teal)}
+  .brand .sub{color:var(--muted); font-size:13.5px; margin-top:2px; max-width:680px}
+  .meta{font-size:12.5px; color:var(--muted); text-align:right; line-height:1.7}
+  .meta b{color:var(--text); font-weight:600}
+  .pill{display:inline-block; padding:2px 9px; border-radius:999px; background:var(--pe-tint); color:var(--pe-teal-darker); font-weight:700; font-size:11.5px}
+
+  /* ---- Disclaimer ---- */
+  .disclaimer{background:#fff7e6; border:1px solid #f3d99b; border-left:4px solid #e0a200; border-radius:10px; padding:11px 14px; margin:16px 0; font-size:13px; color:#5b4708}
+  .disclaimer b{color:#3d3005}
+
+  /* ---- Layer chain ---- */
+  .chain{display:grid; grid-template-columns:1fr auto 1fr auto 1fr; gap:10px; align-items:stretch; margin:16px 0 6px}
+  .layer{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px; box-shadow:var(--shadow); position:relative}
+  .layer.active{border-color:var(--pe-teal); box-shadow:0 0 0 1px var(--pe-teal), var(--shadow)}
+  .layer .num{display:inline-flex; align-items:center; justify-content:center; width:24px; height:24px; border-radius:7px; background:#eef2f6; color:var(--muted); font-weight:700; font-size:13px}
+  .layer.active .num{background:var(--pe-teal); color:#fff}
+  .layer h3{margin:8px 0 2px; font-size:15px; color:var(--ink)}
+  .layer p{margin:0; font-size:12.5px; color:var(--muted)}
+  .layer .src{margin-top:8px; font-size:11.5px; color:#8a929e}
+  .status{position:absolute; top:12px; right:12px; font-size:10.5px; font-weight:700; letter-spacing:.3px; text-transform:uppercase; padding:3px 7px; border-radius:999px}
+  .status.on{background:var(--pe-tint); color:var(--pe-teal-darker)}
+  .status.soon{background:#eef0f3; color:#7a828e}
+  .arrow{display:flex; align-items:center; justify-content:center; color:#b7bfc9; font-size:20px}
+  .chain-note{font-size:12px; color:var(--muted); margin:2px 0 0}
+
+  /* ---- Section card ---- */
+  .section{background:var(--card); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); margin:16px 0; overflow:hidden}
+  .section-head{display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--line)}
+  .section-head h2{margin:0; font-size:16px; color:var(--ink); padding-left:10px; border-left:3px solid var(--pe-teal)}
+  .section-head .tag{font-size:12px; color:var(--muted)}
+
+  /* ---- "How to read this" explainer ---- */
+  .explainer{display:flex; gap:13px; align-items:flex-start; margin:14px 16px; padding:13px 15px; background:var(--pe-tint-2); border:1px solid #cfe7e4; border-left:4px solid var(--pe-teal); border-radius:10px}
+  .explainer-icon{font-size:22px; line-height:1.2}
+  .explainer b{color:var(--pe-teal-darker); font-size:14px}
+  .explainer p{margin:4px 0 0; font-size:13px; color:#33484a}
+  .map-intro{font-size:13px; color:var(--text); margin:12px 0 10px}
+
+  /* ---- Summary chips ---- */
+  .chips{display:flex; flex-wrap:wrap; gap:8px}
+  .chip{display:inline-flex; align-items:center; gap:7px; font-size:12.5px; font-weight:600; color:var(--text); background:#fff; border:1px solid var(--line); border-radius:999px; padding:5px 11px}
+  .swatch{width:11px; height:11px; border-radius:50%}
+
+  /* ---- Map ---- */
+  #map{height:520px; width:100%; background:#e9eef2}
+  .legend{background:#fff; padding:8px 10px; border-radius:8px; box-shadow:var(--shadow); font-size:12px; line-height:1.9}
+  .legend .row{display:flex; align-items:center; gap:7px}
+  .legend .swatch{width:12px; height:12px}
+  .map-hint{font-size:11.5px; color:var(--muted); padding:8px 16px; border-top:1px solid var(--line)}
+
+  /* ---- Level guide (score → level meaning) ---- */
+  .explain-strip{padding:12px 16px; font-size:13px; color:var(--text); background:var(--pe-tint-2); border-bottom:1px solid var(--line)}
+  .explain-strip b{color:var(--ink)}
+  .level-guide{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:10px; padding:14px 16px}
+  .lg-item{display:flex; gap:9px; align-items:flex-start; border:1px solid var(--line); border-radius:10px; padding:9px 11px}
+  .lg-dot{width:12px; height:12px; border-radius:50%; margin-top:3px; flex:none}
+  .lg-name{font-weight:700; font-size:13px; color:var(--ink)}
+  .lg-range{color:var(--muted); font-weight:600; font-size:11.5px; margin-left:3px}
+  .lg-mean{font-size:12px; color:var(--muted); margin-top:1px}
+  .bands-note{padding:0 16px 14px; margin:0; font-size:12px; color:var(--muted)}
+
+  /* ---- Table ---- */
+  .table-scroll{overflow-x:auto}
+  table{border-collapse:collapse; width:100%; font-size:13.5px}
+  thead th{position:sticky; top:0; background:#f8fafb; text-align:left; font-size:12px; color:var(--muted); font-weight:600; padding:9px 12px; border-bottom:1px solid var(--line); cursor:pointer; white-space:nowrap; user-select:none; vertical-align:top}
+  thead th.num{text-align:right}
+  .th-hint{display:block; font-weight:400; color:#9aa3ab; font-size:10.5px; text-transform:none; margin-top:1px}
+  thead th .ind{color:#c2c9d1; font-size:10px}
+  thead th[aria-sort="ascending"] .ind::after{content:"▲"; color:var(--pe-teal)}
+  thead th[aria-sort="descending"] .ind::after{content:"▼"; color:var(--pe-teal)}
+  tbody td{padding:9px 12px; border-bottom:1px solid #eef1f4; white-space:nowrap}
+  tbody td.num{text-align:right; font-variant-numeric:tabular-nums}
+  tbody tr{cursor:pointer}
+  tbody tr:hover{background:var(--pe-tint-2)}
+  .rank{color:var(--muted); width:34px}
+  .badge{display:inline-block; min-width:74px; text-align:center; padding:2px 8px; border-radius:999px; color:#fff; font-size:11.5px; font-weight:700}
+  .score-cell{font-weight:800; font-variant-numeric:tabular-nums}
+  .score-cell .out{font-weight:500; color:#aab0b7; font-size:11px}
+
+  /* ---- Methodology ---- */
+  .prose{padding:6px 16px 18px}
+  .prose h3{font-size:14px; margin:18px 0 6px; color:var(--ink)}
+  .prose p, .prose li{font-size:13.5px; color:#33404f}
+  .formula{background:#0f1722; color:#dbe7f0; border-radius:10px; padding:12px 14px; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; font-size:13px; overflow-x:auto; margin:8px 0}
+  .factor-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:10px; margin:10px 0}
+  .factor{border:1px solid var(--line); border-radius:10px; padding:11px 12px; border-top:3px solid var(--pe-teal)}
+  .factor b{font-size:13px; color:var(--ink)}
+  .factor span{display:block; font-size:12.5px; color:var(--muted); margin-top:3px}
+  details{border-top:1px solid var(--line)}
+  details>summary{cursor:pointer; padding:12px 16px; font-weight:600; font-size:14px; color:var(--ink)}
+
+  /* ---- Footer ---- */
+  footer.site{color:var(--muted); font-size:12.5px; padding:22px 0 40px}
+  footer.site .src-line{margin:6px 0}
+
+  /* ---- Error ---- */
+  .err{display:none; background:#fdecec; border:1px solid #f5b5b5; border-radius:10px; padding:14px; margin:16px 0; font-size:13.5px; color:#7a1f1f}
+  .err code{background:#fff; padding:1px 5px; border-radius:4px}
+
+  @media (max-width:820px){
+    .chain{grid-template-columns:1fr}
+    .arrow{transform:rotate(90deg); height:18px}
+    #map{height:380px}
+    .meta{text-align:left}
+    .head-row{align-items:flex-start}
+    .pe-topnav .pe-link{display:none}
+  }
+
+  /* ---- popup ---- */
+  .pp{font-size:13px; min-width:220px}
+  .pp h4{margin:0 0 2px; font-size:15px; color:var(--ink)}
+  .pp .pp-state{color:var(--muted); font-size:12px; margin-bottom:8px}
+  .pp .pp-score{font-size:27px; font-weight:800; line-height:1}
+  .pp .pp-out-of{font-size:13px; color:#aab0b7; font-weight:600; margin-left:1px}
+  .pp .pp-badge{vertical-align:middle; margin-left:8px}
+  .pp .pp-interp{margin:9px 0 2px; font-size:12.5px; color:#33484a; background:var(--pe-tint-2); border-radius:7px; padding:7px 9px}
+  .pp .pp-sub{margin-top:9px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.3px; color:var(--muted)}
+  .pp dl{display:grid; grid-template-columns:auto auto; gap:2px 12px; margin:5px 0 0; font-size:12.5px}
+  .pp dt{color:var(--muted)} .pp dd{margin:0; text-align:right; font-variant-numeric:tabular-nums; color:var(--text)}
+  .pp .asof{margin-top:8px; font-size:11px; color:#8a929e}
+
+  /* ---- Layer 2: Fever Signal (kept visually distinct from Layer 1) ---- */
+  .l2sec .section-head{background:var(--pe-tint-2)}
+  .l2sec .section-head h2{border-left-color:var(--pe-teal-dark)}
+  .l2-sample{margin:14px 16px 0; padding:10px 13px; background:#fff3df; border:1px solid #f3d9a3; border-left:4px solid #e0a200; border-radius:10px; font-size:12.5px; color:#6b5108}
+  .l2-sample b{color:#3d3005}
+  .l2-explainer{border-color:#cfe7e4}
+  .l2-block{padding:6px 16px 4px}
+  .l2-h3{font-size:14px; margin:16px 0 2px; color:var(--ink)}
+  .l2-sub{font-size:12.5px; color:var(--muted); margin:0 0 10px}
+  #l2-chart{width:100%; background:#fcfdfd; border:1px solid var(--line); border-radius:10px; padding:6px 8px}
+  #l2-chart svg{width:100%; height:auto; display:block}
+  .l2-legend{display:flex; flex-wrap:wrap; gap:8px 16px; margin:10px 2px 2px}
+  .l2-leg{display:flex; align-items:center; gap:7px; font-size:12.5px; color:var(--text)}
+  .l2-leg .sw{width:16px; height:3px; border-radius:2px; flex:none}
+  .l2-leg b{font-variant-numeric:tabular-nums; color:var(--ink)}
+  .l2-delta{font-size:11.5px; font-weight:600}
+  .l2-up{color:var(--pe-teal-dark)} .l2-down,.l2-flat{color:#8a929e}
+  .l2-barcell{min-width:118px}
+  .l2-bar-wrap{display:flex; align-items:center; gap:8px; justify-content:flex-end}
+  .l2-bar-track{flex:1; max-width:78px; height:7px; background:#eef2f4; border-radius:4px; overflow:hidden}
+  .l2-bar-fill{height:100%; background:var(--pe-teal); border-radius:4px}
+  .l2-val{font-variant-numeric:tabular-nums; min-width:28px; text-align:right; font-weight:700; color:var(--ink)}
+  .status.sample{background:#fff3df; color:#9a6700}
+  .layer.preview{border-color:#e7c673; box-shadow:0 0 0 1px #e7c673, var(--shadow)}
+  .layer.preview .num{background:#e0a200; color:#fff}
+
+  /* ---- Layer 3: Confirmed Cases (official records; kept distinct from L1 risk + L2 search) ---- */
+  .l3sec .section-head{background:#eef1f6}
+  .l3sec .section-head h2{border-left-color:#3a4a63}
+  .l3-sample{margin:14px 16px 0; padding:10px 13px; background:#fff3df; border:1px solid #f3d9a3; border-left:4px solid #e0a200; border-radius:10px; font-size:12.5px; color:#6b5108}
+  .l3-sample b{color:#3d3005}
+  .l3-explainer{background:#f1f3f8; border-color:#d2d9e6; border-left-color:#3a4a63}
+  .l3-explainer b{color:#2f3c54}
+  .l3-explainer p{color:#384256}
+  .l3-block{padding:6px 16px 4px}
+  .l3-h3{font-size:14px; margin:16px 0 2px; color:var(--ink)}
+  .l3-sub{font-size:12.5px; color:var(--muted); margin:0 0 10px}
+  .l3-report{margin:14px 16px 2px; border:1px solid #d9dfe9; border-radius:12px; background:#f7f9fc; display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); overflow:hidden}
+  .l3-rep-item{padding:11px 15px; border-right:1px solid #e6eaf1}
+  .l3-rep-item:last-child{border-right:none}
+  .l3-rep-k{display:block; font-size:11px; text-transform:uppercase; letter-spacing:.3px; color:#7a828e; font-weight:700}
+  .l3-rep-v{display:block; font-size:14px; color:var(--ink); font-weight:700; margin-top:3px}
+  .l3-rep-v a{font-weight:600}
+  .l3-cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin:4px 0 10px}
+  .l3-card{border:1px solid var(--line); border-radius:11px; padding:11px 13px; border-top:3px solid #3a4a63; background:#fff}
+  .l3-card-name{font-size:12.5px; font-weight:700; color:var(--ink)}
+  .l3-card-cases{font-size:26px; font-weight:800; line-height:1.1; font-variant-numeric:tabular-nums; margin-top:4px}
+  .l3-card-unit{font-size:12px; color:#aab0b7; font-weight:600; margin-left:3px}
+  .l3-card-sub{font-size:11.5px; color:var(--muted); margin-top:3px}
+  .l3-card.zero{background:#fafbfc}
+  .l3-card.zero .l3-card-cases{color:#b7bdc6}
+  .l3-legend{display:flex; flex-wrap:wrap; gap:8px 14px; margin:0 0 10px}
+  .l3-leg{display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text)}
+  .l3-dot{display:inline-block; width:10px; height:10px; border-radius:50%; flex:none}
+  #l3-table th .l3-dot, #l3-table td .l3-dot{vertical-align:middle; margin-right:5px}
+  .l3-zero{color:#c2c9d1}
+  .l3-total{font-weight:800; font-variant-numeric:tabular-nums}
+  .l3-details{border-top:1px solid var(--line); margin-top:10px}
+  .l3-details summary{cursor:pointer; padding:11px 2px; font-weight:600; font-size:13px; color:var(--ink)}
+  .l3-details tbody td{white-space:nowrap}
+  .l3-pill{display:inline-block; padding:1px 8px; border-radius:999px; font-size:11px; font-weight:700; color:#fff}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="pe-topbar">
+    <div class="wrap pe-topbar-in">
+      <a class="pe-logo" href="#" aria-label="PharmEasy">
+        <img class="pe-logo-img"
+             src="https://pharmeasy.in/blog/wp-content/themes/Pharmeasy/assets/img/pe_logo-white.svg"
+             alt="PharmEasy"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'">
+        <span class="pe-word" style="display:none">PharmEasy</span>
+      </a>
+      <nav class="pe-topnav">
+        <a class="pe-link" href="#methodology">How it works</a>
+        <span class="pe-tag">Health Insights</span>
+      </nav>
+    </div>
+  </div>
+  <div class="pe-subbar">
+    <div class="wrap head-row">
+      <div class="brand">
+        <h1>Mosquito <span class="ix">Watch</span></h1>
+        <div class="sub">A weekly watch on mosquito-borne disease across India, built from three signals: breeding weather, fever searches, and confirmed cases.</div>
+      </div>
+      <div class="meta" id="meta"><span class="pill">loading…</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="disclaimer">
+    <b>Quick heads-up:</b> this only shows where the weather suits mosquito breeding. It does not predict actual
+    disease cases, it isn't medical advice, and it can't tell you your own chances of getting ill. The air
+    temperature here is just weather, and it has nothing to do with running a fever. For anything important,
+    read it alongside official surveillance and what local teams are seeing on the ground.
+  </div>
+
+  <div id="load-error" class="err"></div>
+
+  <!-- Three-layer causal chain -->
+  <section class="chain" aria-label="The three-layer model">
+    <div class="layer active">
+      <span class="status on">Live</span>
+      <span class="num">1</span>
+      <h3>Breeding Weather</h3>
+      <p>Is the weather right now good for mosquitoes to breed?</p>
+      <div class="src" id="layer1-src">Updated daily</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="layer" id="chain-l2">
+      <span class="status soon" id="chain-l2-status">Coming soon</span>
+      <span class="num">2</span>
+      <h3>Fever Signal</h3>
+      <p>How many people are looking up fever and symptoms online.</p>
+      <div class="src" id="chain-l2-src">From Google Trends, updated weekly</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="layer" id="chain-l3">
+      <span class="status soon" id="chain-l3-status">Coming soon</span>
+      <span class="num">3</span>
+      <h3>Confirmed Cases</h3>
+      <p>Outbreaks that health authorities have actually reported.</p>
+      <div class="src" id="chain-l3-src">From the IDSP weekly reports</div>
+    </div>
+  </section>
+  <p class="chain-note">The idea is simple. The weather turns favourable first, then more people start searching
+    about fever, and a week or two later the confirmed cases show up. We show each step on its own instead of
+    squashing them into a single number. The weather step runs on live data, the fever step is switched on with
+    sample data while we wire up a real search source, and the confirmed cases step now reads the latest official
+    IDSP weekly outbreak report.</p>
+
+  <!-- Layer 1: map -->
+  <section class="section">
+    <div class="section-head">
+      <h2>Layer 1: Breeding-favourability map</h2>
+      <span class="tag" id="asof-tag"></span>
+    </div>
+
+    <div class="explainer">
+      <div class="explainer-icon">🦟</div>
+      <div>
+        <b>What the score means</b>
+        <p>Each city gets a number from <b>0 to 100</b>. It tells you how well this week's weather (the heat, the
+          humidity and the rain) suits mosquitoes that want to breed. A low number means the weather is working
+          against them. A high number means conditions are about as good as they get. And remember, this is all
+          about the weather. It is not a count of cases, and it says nothing about your own risk of getting sick.</p>
+      </div>
+    </div>
+
+    <div style="padding:0 16px">
+      <p class="map-intro">Each dot is a city. The <b>bigger and redder</b> it is, the better this week's
+        weather suits mosquito breeding. Click any dot to see the numbers behind it.</p>
+      <div class="chips" id="summary-chips"></div>
+    </div>
+    <div id="map" style="margin-top:12px"></div>
+    <div class="map-hint">A dot's <b>size</b> and <b>colour</b> both come from its 0 to 100 score. Once again, this is about breeding weather, <b>not</b> reported cases.</div>
+  </section>
+
+  <!-- Table -->
+  <section class="section">
+    <div class="section-head">
+      <h2>City risk table</h2>
+      <span class="tag">Sorted by score. Click a heading to re-sort, or click any row to jump to it on the map.</span>
+    </div>
+    <div class="explain-strip">
+      <b>Score</b> is how good this week's weather is for mosquito breeding, on a scale of 0 to 100. The higher
+      the number, the better the weather is for mosquitoes. <b>Level</b> just sorts that score into easy bands.
+      Both are about the weather, <b>not real cases</b>.
+    </div>
+    <div class="level-guide" id="level-guide"></div>
+    <p class="bands-note">These bands just compare cities against each other. They are not the chance of mosquitoes being present, of breeding being confirmed, of disease spreading, or of anyone falling ill.</p>
+    <div class="table-scroll">
+      <table id="risk-table">
+        <thead>
+          <tr>
+            <th class="num" data-key="rank">#</th>
+            <th data-key="name">City <span class="ind"></span></th>
+            <th data-key="state">State <span class="ind"></span></th>
+            <th class="num" data-key="score">Score<span class="th-hint">0 to 100, higher is worse</span> <span class="ind"></span></th>
+            <th data-key="bucket">Level<span class="th-hint">what the score means</span> <span class="ind"></span></th>
+            <th class="num" data-key="temp">Temp °C<span class="th-hint">this week's average</span> <span class="ind"></span></th>
+            <th class="num" data-key="humidity">Humidity %<span class="th-hint">this week's average</span> <span class="ind"></span></th>
+            <th class="num" data-key="rain">2-week rain<span class="th-hint">mm, what fuels breeding</span> <span class="ind"></span></th>
+          </tr>
+        </thead>
+        <tbody id="risk-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Methodology -->
+  <section class="section" id="methodology">
+    <div class="section-head"><h2>How we work out the score</h2><span class="tag" id="model-tag"></span></div>
+    <div class="prose">
+      <p>We show exactly how each score is worked out, so anyone can check it or adjust it. It comes from four
+        things about the weather, combined like this:</p>
+      <div class="formula" id="formula-box">Score = 100 × temperature fit × ( 0.30 humidity + 0.25 recent rain + 0.45 earlier rain )</div>
+      <p>Temperature acts like a gatekeeper. If it's too cold or too hot, mosquitoes won't breed no matter how
+        wet it is, so the score drops close to zero. Once the temperature lands in their comfort zone, the rest
+        comes down to how much standing water and humidity there is.</p>
+      <p>There's one twist with rain: it helps, but only up to a point. A heavy downpour can wash eggs and larvae
+        out of the puddles they live in, so a real deluge actually pulls the score down rather than pushing it up.</p>
+      <div class="factor-grid" id="factor-grid"></div>
+      <h3>Grounded in published research</h3>
+      <p>This follows a well-established line of Indian research that maps mosquito-borne disease risk by combining
+        environmental layers (water, moisture, vegetation, temperature) with transparent weights. Ours is a
+        lightweight, daily version that uses recent weather in place of satellite imagery. For example,
+        <a href="https://doi.org/10.1029/2023GH001007" target="_blank" rel="noopener">Palo and colleagues (2025)</a>
+        mapped risk zones in Cuttack, Odisha;
+        <a href="https://doi.org/10.1007/s41324-019-00242-8" target="_blank" rel="noopener">Ali and Ahmad (2019)</a>
+        used a GIS and weighted-overlay method for Kolkata; and
+        <a href="https://doi.org/10.1007/s41204-020-00084-y" target="_blank" rel="noopener">Kumar and Agrawal (2020)</a>
+        mapped vector habitats in Gorakhpur. The temperature band follows
+        <a href="https://doi.org/10.1371/journal.pntd.0005568" target="_blank" rel="noopener">Mordecai and colleagues (2017)</a>,
+        who found that Aedes-borne transmission runs roughly from 18 to 34&deg;C and peaks around 26 to 29&deg;C.</p>
+      <h3>What each level means</h3>
+      <div class="chips" id="bucket-legend"></div>
+      <details>
+        <summary>Where the data comes from, and what it can't tell you</summary>
+        <div style="padding:0 0 6px">
+          <h3>Where the weather comes from</h3>
+          <p id="source-note">Weather data is pulled for each city by its location.</p>
+          <h3>Where it falls short</h3>
+          <ul>
+            <li>It only looks at the weather. It doesn't count real mosquitoes, infections or cases.</li>
+            <li>It's tuned for the mosquitoes behind dengue and chikungunya (Aedes). Malaria, Japanese encephalitis and filariasis come from other mosquitoes that breed in different places, so treat those as only loosely covered until we add dedicated modules.</li>
+            <li>We take one reading near the middle of each city, so very local spots like building sites or stored water won't show up.</li>
+            <li>Treat the score as a rough guide, not an exact measurement.</li>
+            <li>One more time: the air temperature here is just weather. It is not a fever.</li>
+          </ul>
+          <h3>Why we split it into three</h3>
+          <p>Layer 1, the one you're looking at, is all about the weather. Layer 2, further down this page,
+            watches how often people search for fever and symptoms (on sample data for now, until we connect a
+            live search source). Layer 3, at the bottom, brings in the outbreaks that India's
+            <a href="https://idsp.mohfw.gov.in/" target="_blank" rel="noopener">Integrated Disease Surveillance Programme (IDSP)</a>
+            actually reports each week, read straight from its official weekly PDF. We keep the three apart instead
+            of rolling them into one number, because that is more honest and easier to trust.</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- Layer 2: Fever Signal -->
+  <section class="section l2sec" id="fever-signal" style="display:none">
+    <div class="section-head">
+      <h2>Layer 2: Fever Signal (search attention)</h2>
+      <span class="tag" id="l2-asof"></span>
+    </div>
+
+    <div class="l2-sample" id="l2-sample" style="display:none">
+      <b>Sample data.</b> The numbers below are synthetic, generated for development and design. They are
+      not real Google Trends figures. We switch on a real search source before this goes public.
+    </div>
+
+    <div class="explainer l2-explainer">
+      <div class="explainer-icon">🔎</div>
+      <div>
+        <b>What this is</b>
+        <p>This tracks how often people across India look up fever and symptom terms, shown for the same cities
+          as the weather layer and over the last few weeks. Search interest is only reliable at the state level
+          here, so each city shows its state's signal. It is a sign of <b>attention</b>, not a count of cases,
+          and the values are relative on a 0 to 100 scale. It stands on its own. It is <b>not</b> added to the
+          weather score above, and the air temperature in Layer 1 has nothing to do with a body-temperature fever.</p>
+      </div>
+    </div>
+
+    <div class="l2-block">
+      <h3 class="l2-h3">How searches are trending across India</h3>
+      <p class="l2-sub">Each line is a group of search terms on a shared 0 to 100 scale, over the last
+        <span id="l2-weeks"></span> weeks. The thing to watch is whether attention is climbing as the season turns.</p>
+      <div id="l2-chart"></div>
+      <div class="l2-legend" id="l2-chart-legend"></div>
+    </div>
+
+    <div class="l2-block">
+      <h3 class="l2-h3">Search attention by city</h3>
+      <p class="l2-sub">Latest search interest for each city, taken from its state (Google Trends does not break
+        these terms down by city in India), normalised 0 to 100 within each column. Cities in the same state
+        share a number. Click a heading to re-sort. Remember, these are searches, not cases.</p>
+      <div class="table-scroll">
+        <table id="l2-table">
+          <thead></thead>
+          <tbody id="l2-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <p class="bands-note">Search interest is relative and normalised, not a tally of people or of cases. A single
+      news story can lift searches everywhere at once. Read it next to official surveillance, never as a diagnosis.</p>
+  </section>
+
+  <!-- Layer 3: Confirmed Cases -->
+  <section class="section l3sec" id="confirmed-cases" style="display:none">
+    <div class="section-head">
+      <h2>Layer 3: Confirmed Cases (official IDSP outbreaks)</h2>
+      <span class="tag" id="l3-asof"></span>
+    </div>
+
+    <div class="l3-sample" id="l3-sample" style="display:none">
+      <b>Sample data.</b> These outbreak numbers are synthetic, generated for development and design. They are not
+      real IDSP figures. The build switches to the live source to pull the real weekly report.
+    </div>
+
+    <div class="explainer l3-explainer">
+      <div class="explainer-icon">🏥</div>
+      <div>
+        <b>What this is</b>
+        <p>This is the official ground truth: outbreaks that India's Integrated Disease Surveillance Programme has
+          actually reported for the week shown. It is the last link in the chain, the one that confirms what the
+          weather and the searches hinted at. It lags by a week or two and it undercounts, because not every illness
+          becomes a reported outbreak. It confirms, it does not predict, and it stands on its own. It is <b>not</b>
+          added to the weather score or the search signal above.</p>
+      </div>
+    </div>
+
+    <div class="l3-report" id="l3-report"></div>
+
+    <div class="l3-block">
+      <h3 class="l3-h3">What was reported this week</h3>
+      <p class="l3-sub">Reported outbreaks of the diseases we follow, totalled across the country for this one
+        weekly report. <span id="l3-denominator"></span></p>
+      <div class="l3-cards" id="l3-cards"></div>
+    </div>
+
+    <div class="l3-block">
+      <h3 class="l3-h3">Reported outbreaks by state</h3>
+      <p class="l3-sub">Every state with at least one reported outbreak in the diseases we track, for this week's
+        report. Click a heading to re-sort. These are confirmed outbreak tallies, not the breeding score or the
+        search interest from the layers above.</p>
+      <div class="table-scroll">
+        <table id="l3-table">
+          <thead></thead>
+          <tbody id="l3-body"></tbody>
+        </table>
+      </div>
+      <details class="l3-details">
+        <summary>See the individual outbreaks (district level)</summary>
+        <div class="table-scroll">
+          <table id="l3-outbreaks">
+            <thead>
+              <tr>
+                <th data-key="state">State <span class="ind"></span></th>
+                <th data-key="district">District <span class="ind"></span></th>
+                <th data-key="disease">Disease <span class="ind"></span></th>
+                <th class="num" data-key="cases">Cases <span class="ind"></span></th>
+                <th class="num" data-key="deaths">Deaths <span class="ind"></span></th>
+                <th data-key="status">Status <span class="ind"></span></th>
+                <th data-key="outbreak_id">IDSP ID <span class="ind"></span></th>
+              </tr>
+            </thead>
+            <tbody id="l3-outbreaks-body"></tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+
+    <p class="bands-note" id="l3-caveat">These are reported outbreaks, not a full case count. IDSP records an
+      outbreak once it is investigated, so the real numbers run higher and arrive later. Treat this as confirmation
+      that something happened, not as the size of it. Always defer to your state health department and the official
+      IDSP reports.</p>
+  </section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="src-line" id="footer-attr"></div>
+    <div class="src-line" id="footer-l3">Confirmed cases come from the <a href="https://idsp.mohfw.gov.in/index4.php?lang=1&level=0&linkid=406&lid=3689" target="_blank" rel="noopener">IDSP Weekly Outbreak Reports</a>, the Ministry of Health &amp; Family Welfare's official weekly outbreak surveillance.</div>
+    <div class="src-line">This is a weather-based guide, nothing more. Please don't treat it as official health guidance or medical advice.</div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+(function(){
+  "use strict";
+  var BUCKET_COLORS = {"Low":"#2b9348","Moderate":"#f4b400","High":"#f57c00","Very High":"#d62828"};
+  var BUCKET_ORDER  = {"Low":0,"Moderate":1,"High":2,"Very High":3};
+  var PROVIDER_NAMES = {"open-meteo":"Open-Meteo","nasa-power":"NASA POWER"};
+  var LEVELS = [
+    {name:"Very High", range:"75-100", meaning:"About as good as it gets for breeding right now."},
+    {name:"High",      range:"50-74",  meaning:"The weather is working in the mosquitoes' favour."},
+    {name:"Moderate",  range:"25-49",  meaning:"Some of the things mosquitoes need are in place."},
+    {name:"Low",       range:"0-24",   meaning:"The weather is mostly working against breeding."}
+  ];
+  var INTERP = {
+    "Very High":"about as good as it gets for mosquito breeding",
+    "High":"working in the mosquitoes' favour",
+    "Moderate":"okay for mosquito breeding",
+    "Low":"mostly working against mosquito breeding"
+  };
+  var INDIA_CENTER = [22.2, 80.0], INDIA_ZOOM = 5;
+
+  var MAP, MARKERS = {}, CITIES = [], CFG = {};
+  var SORT = {key:"score", dir:-1};
+
+  // Layer 2 (Fever Signal) state + palette. Colours are deliberately a separate
+  // data-series set, NOT the green/amber/orange/red risk ramp used in Layer 1,
+  // so the two layers never read as the same metric.
+  var L2_COLORS = {febrile:"#0C6E69", dengue:"#4c8bf5", malaria:"#8e7cc3", chikungunya:"#d98da6"};
+  var L2_FALLBACK = ["#0C6E69","#4c8bf5","#8e7cc3","#d98da6","#5fa8a3","#b07bac"];
+  var L2_PROVIDER_NAMES = {mock:"sample data", apify:"Google Trends (Apify)", pytrends:"Google Trends (pytrends)", serpapi:"Google Trends (SerpApi)"};
+  var L2DATA = null, L2SORT = {key:"febrile", dir:-1};
+
+  document.addEventListener("DOMContentLoaded", init);
+
+  function init(){
+    initLayer2();   // independent of Layer 1; a Layer 2 failure must not break the page
+    fetch("data/data.json", {cache:"no-store"})
+      .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
+      .then(renderAll)
+      .catch(function(err){
+        var box = document.getElementById("load-error");
+        box.style.display = "block";
+        box.innerHTML = "<b>Couldn't load data.json.</b> If you opened this file straight from your computer, "+
+          "run a small local server instead. From the project folder, run "+
+          "<code>python -m http.server 8123</code> and open "+
+          "<code>http://localhost:8123/</code> in your browser.<br><small>"+err.message+"</small>";
+        console.error(err);
+      });
+  }
+
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"})[c]; }); }
+  function num(v, d){ return (v===null||v===undefined) ? "n/a" : (typeof v==="number"? v.toFixed(d===undefined?1:d) : v); }
+  function interpretation(bucket){ return INTERP[bucket] || "hard to read right now"; }
+
+  function renderAll(data){
+    CITIES = (data.cities||[]).slice();
+    CFG = data.scoring_config || {};
+
+    var provider = PROVIDER_NAMES[data.provider] || data.provider || "n/a";
+    var when = data.generated_at ? new Date(data.generated_at) : null;
+    var whenStr = when ? when.toLocaleString(undefined,{dateStyle:"medium",timeStyle:"short"}) : "n/a";
+    document.getElementById("meta").innerHTML =
+      "<div><b>Last updated:</b> "+esc(whenStr)+"</div>"+
+      "<div><b>Weather from</b> <span class='pill'>"+esc(provider)+"</span> &nbsp; across <b>"+CITIES.length+"</b> cities</div>";
+    document.getElementById("layer1-src").textContent = "From "+provider+", updated daily";
+    document.getElementById("model-tag").textContent = data.model_version ? ("model "+data.model_version) : "";
+    document.getElementById("footer-attr").innerHTML =
+      "Weather for Layer 1 comes from "+esc(data.attribution || provider)+". Map tiles © OpenStreetMap contributors and © CARTO.";
+
+    var asof = CITIES.length && CITIES[0].inputs ? CITIES[0].inputs.as_of_date : null;
+    document.getElementById("asof-tag").textContent = asof ? ("weather as of "+asof) : "";
+
+    if(data.failed_count){
+      var box = document.getElementById("load-error");
+      box.style.display="block";
+      box.style.background="#fff7e6"; box.style.borderColor="#f3d99b"; box.style.color="#5b4708";
+      box.innerHTML = "<b>Heads-up:</b> we couldn't score "+data.failed_count+" city(ies) this time, so they're not shown.";
+    }
+
+    initMap();
+    addMarkers();
+    renderSummary();
+    renderLevelGuide();
+    renderTable();
+    populateMethodology(data);
+    wireSortHeaders();
+  }
+
+  function initMap(){
+    MAP = L.map("map", {scrollWheelZoom:false}).setView(INDIA_CENTER, INDIA_ZOOM);
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      subdomains:"abcd", maxZoom:19
+    }).addTo(MAP);
+
+    var legend = L.control({position:"bottomright"});
+    legend.onAdd = function(){
+      var d = L.DomUtil.create("div","legend");
+      var html = "<div style='font-weight:700;margin-bottom:3px'>Breeding favourability</div>";
+      ["Very High","High","Moderate","Low"].forEach(function(b){
+        html += "<div class='row'><span class='swatch' style='background:"+BUCKET_COLORS[b]+"'></span>"+b+"</div>";
+      });
+      d.innerHTML = html; return d;
+    };
+    legend.addTo(MAP);
+
+    var rt;
+    window.addEventListener("resize", function(){ clearTimeout(rt); rt=setTimeout(function(){ MAP.invalidateSize(); },150); });
+  }
+
+  function radiusFor(score){ return 6 + (Math.max(0,Math.min(100,score))/100)*15; }
+
+  function addMarkers(){
+    CITIES.forEach(function(c){
+      var color = BUCKET_COLORS[c.bucket] || "#888";
+      var m = L.circleMarker([c.lat, c.lon], {
+        radius:radiusFor(c.score), color:"#ffffff", weight:1.5, fillColor:color, fillOpacity:0.88
+      }).addTo(MAP);
+      m.bindPopup(popupHtml(c), {maxWidth:300});
+      MARKERS[c.name] = m;
+    });
+  }
+
+  function badge(bucket){
+    return "<span class='badge' style='background:"+(BUCKET_COLORS[bucket]||"#888")+"'>"+esc(bucket)+"</span>";
+  }
+
+  function popupHtml(c){
+    var i = c.inputs||{};
+    return "<div class='pp'>"+
+      "<h4>"+esc(c.name)+"</h4>"+
+      "<div class='pp-state'>"+esc(c.state)+"</div>"+
+      "<div><span class='pp-score' style='color:"+(BUCKET_COLORS[c.bucket]||"#333")+"'>"+num(c.score)+"</span>"+
+        "<span class='pp-out-of'>/100</span><span class='pp-badge'>"+badge(c.bucket)+"</span></div>"+
+      "<p class='pp-interp'>This week's weather here is <b>"+interpretation(c.bucket)+"</b>.</p>"+
+      "<div class='pp-sub'>What's behind this score</div>"+
+      "<dl>"+
+        "<dt>Average temperature</dt><dd>"+num(i.temp_mean_c)+" °C</dd>"+
+        "<dt>Humidity</dt><dd>"+num(i.humidity_pct)+" %</dd>"+
+        "<dt>Rain, last 7 days</dt><dd>"+num(i.rain_recent_mm)+" mm</dd>"+
+        "<dt>Rain, 1 to 2 weeks ago</dt><dd>"+num(i.rain_lagged_mm)+" mm</dd>"+
+      "</dl>"+
+      "<div class='asof'>Weather as of "+esc(i.as_of_date||"n/a")+". This is about conditions, not reported cases.</div>"+
+    "</div>";
+  }
+
+  function renderSummary(){
+    var counts = {"Very High":0,"High":0,"Moderate":0,"Low":0};
+    CITIES.forEach(function(c){ if(counts[c.bucket]!==undefined) counts[c.bucket]++; });
+    var html = "";
+    ["Very High","High","Moderate","Low"].forEach(function(b){
+      html += "<span class='chip'><span class='swatch' style='background:"+BUCKET_COLORS[b]+"'></span>"+
+              b+" <b style='margin-left:2px'>"+counts[b]+"</b></span>";
+    });
+    document.getElementById("summary-chips").innerHTML = html;
+  }
+
+  function renderLevelGuide(){
+    document.getElementById("level-guide").innerHTML = LEVELS.map(function(l){
+      return "<div class='lg-item'><span class='lg-dot' style='background:"+BUCKET_COLORS[l.name]+"'></span>"+
+        "<div><div class='lg-name'>"+esc(l.name)+"<span class='lg-range'>"+esc(l.range)+"</span></div>"+
+        "<div class='lg-mean'>"+esc(l.meaning)+"</div></div></div>";
+    }).join("");
+  }
+
+  function sortVal(c, key){
+    switch(key){
+      case "name": return c.name;
+      case "state": return c.state;
+      case "bucket": return BUCKET_ORDER[c.bucket] != null ? BUCKET_ORDER[c.bucket] : -1;
+      case "temp": return c.inputs ? c.inputs.temp_mean_c : null;
+      case "humidity": return c.inputs ? c.inputs.humidity_pct : null;
+      case "rain": return c.inputs ? c.inputs.rain_lagged_mm : null;
+      default: return c.score;
+    }
+  }
+
+  function applySort(){
+    var k=SORT.key, dir=SORT.dir;
+    if(k==="rank") k="score";
+    CITIES.sort(function(a,b){
+      var va=sortVal(a,k), vb=sortVal(b,k);
+      if(va===null||va===undefined) va = (typeof vb==="string")? "" : -Infinity;
+      if(vb===null||vb===undefined) vb = (typeof va==="string")? "" : -Infinity;
+      if(typeof va==="string") return dir*va.localeCompare(vb);
+      return dir*(va-vb);
+    });
+  }
+
+  function renderTable(){
+    applySort();
+    var body = document.getElementById("risk-body");
+    var rows = CITIES.map(function(c,idx){
+      var i=c.inputs||{};
+      return "<tr data-city='"+esc(c.name)+"'>"+
+        "<td class='num rank'>"+(idx+1)+"</td>"+
+        "<td><b>"+esc(c.name)+"</b></td>"+
+        "<td>"+esc(c.state)+"</td>"+
+        "<td class='num score-cell' style='color:"+(BUCKET_COLORS[c.bucket]||"#333")+"'>"+num(c.score)+"<span class='out'>/100</span></td>"+
+        "<td>"+badge(c.bucket)+"</td>"+
+        "<td class='num'>"+num(i.temp_mean_c)+"</td>"+
+        "<td class='num'>"+num(i.humidity_pct)+"</td>"+
+        "<td class='num'>"+num(i.rain_lagged_mm)+"</td>"+
+      "</tr>";
+    }).join("");
+    body.innerHTML = rows;
+    Array.prototype.forEach.call(body.querySelectorAll("tr"), function(tr){
+      tr.addEventListener("click", function(){
+        var name = tr.getAttribute("data-city"), m = MARKERS[name];
+        if(m){ MAP.flyTo(m.getLatLng(), 7, {duration:.6}); m.openPopup(); }
+      });
+    });
+    updateSortIndicators();
+  }
+
+  function wireSortHeaders(){
+    Array.prototype.forEach.call(document.querySelectorAll("#risk-table thead th"), function(th){
+      th.addEventListener("click", function(){
+        var k = th.getAttribute("data-key");
+        if(SORT.key===k){ SORT.dir*=-1; }
+        else { SORT.key=k; SORT.dir = (k==="name"||k==="state")? 1 : -1; }
+        renderTable();
+      });
+    });
+  }
+
+  function updateSortIndicators(){
+    Array.prototype.forEach.call(document.querySelectorAll("#risk-table thead th"), function(th){
+      var k=th.getAttribute("data-key");
+      if(k===SORT.key || (SORT.key==="score" && k==="rank")) th.setAttribute("aria-sort", SORT.dir>0?"ascending":"descending");
+      else th.removeAttribute("aria-sort");
+    });
+  }
+
+  function populateMethodology(data){
+    var t=CFG.temperature||{}, h=CFG.humidity||{}, w=CFG.weights||{}, b=CFG.buckets||{}, win=CFG.windows||{};
+    if(w.humidity!=null){
+      document.getElementById("formula-box").innerHTML =
+        "Score = 100 × temperature fit × ( "+
+        w.humidity+" humidity + "+w.rain_recent+" recent rain + "+w.rain_lagged+" earlier rain )";
+    }
+    var factors = [
+      ["Temperature (the gatekeeper)",
+        "Mosquitoes do best between "+(t.opt_low_c||"25")+" and "+(t.opt_high_c||"30")+"°C. Below "+
+        (t.min_c||"18")+" or above "+(t.max_c||"35")+"°C, breeding pretty much stops."],
+      ["Humidity",
+        "Damp air keeps mosquitoes alive longer. This climbs from nothing at "+(h.low_pct||"40")+"% up to full at "+(h.high_pct||"70")+"%. Weight: "+(w.humidity!=null?w.humidity:"n/a")+"."],
+      ["Recent rain (last "+(win.current_days||7)+" days)",
+        "Fresh puddles and standing water give them places to lay eggs. Weight: "+(w.rain_recent!=null?w.rain_recent:"n/a")+"."],
+      ["Rain from "+(win.lag_start_day||7)+" to "+(win.lag_end_day||14)+" days ago",
+        "This counts for the most (weight "+(w.rain_lagged!=null?w.rain_lagged:"n/a")+"). It takes a week or two after the rain for new adult mosquitoes to appear, so older rain often tells you the most."]
+    ];
+    document.getElementById("factor-grid").innerHTML = factors.map(function(f){
+      return "<div class='factor'><b>"+esc(f[0])+"</b><span>"+esc(f[1])+"</span></div>";
+    }).join("");
+
+    document.getElementById("bucket-legend").innerHTML = LEVELS.map(function(l){
+      return "<span class='chip'><span class='swatch' style='background:"+BUCKET_COLORS[l.name]+"'></span>"+
+        esc(l.name)+" <span style='color:#8a929e;font-weight:500;margin-left:2px'>"+esc(l.range)+"</span></span>";
+    }).join("");
+
+    var provider = PROVIDER_NAMES[data.provider] || data.provider;
+    document.getElementById("source-note").innerHTML =
+      "For this update we pulled the weather from <b>"+esc(provider)+"</b> ("+esc(data.attribution||"")+"), city by city. "+
+      "We can switch to a different weather source if we need to, and the exact numbers may shift a little when we do, so it's best to go by the level rather than a single score.";
+  }
+
+  // ===== Layer 2: Fever Signal ============================================
+  function l2Color(key, i){ return L2_COLORS[key] || L2_FALLBACK[i % L2_FALLBACK.length]; }
+
+  function initLayer2(){
+    fetch("data/fever_signal.json", {cache:"no-store"})
+      .then(function(r){ if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); })
+      .then(renderLayer2)
+      .catch(function(err){ console.warn("Layer 2 (Fever Signal) not loaded:", err.message); });
+  }
+
+  function renderLayer2(data){
+    L2DATA = data;
+    L2SORT = {key:data.headline_group || "febrile", dir:-1};
+    var sec = document.getElementById("fever-signal");
+    if(sec) sec.style.display = "block";
+
+    var when = data.generated_at ? new Date(data.generated_at) : null;
+    var whenStr = when ? when.toLocaleString(undefined,{dateStyle:"medium",timeStyle:"short"}) : "n/a";
+    var prov = L2_PROVIDER_NAMES[data.provider] || data.provider || "n/a";
+    var asof = document.getElementById("l2-asof");
+    if(asof) asof.textContent = (data.is_sample ? "sample data" : ("from "+prov)) + ", updated "+whenStr;
+    var wk = document.getElementById("l2-weeks");
+    if(wk) wk.textContent = data.lookback_weeks || "";
+    if(data.is_sample){ var sb = document.getElementById("l2-sample"); if(sb) sb.style.display = "block"; }
+
+    document.getElementById("l2-chart").innerHTML = buildL2Chart(data.national_trend || []);
+    document.getElementById("l2-chart-legend").innerHTML = buildL2Legend(data.national_trend || []);
+    renderL2Table();
+    flipChainCardL2(data);
+  }
+
+  function buildL2Chart(series){
+    var W=760, H=250, padL=30, padR=18, padT=14, padB=26;
+    var plotW=W-padL-padR, plotH=H-padT-padB;
+    var n=0; series.forEach(function(g){ if(g.points && g.points.length>n) n=g.points.length; });
+    if(n<2) return "<p class='l2-sub'>Not enough data points to draw the trend yet.</p>";
+    function X(i){ return padL + (i/(n-1))*plotW; }
+    function Y(v){ return padT + (1 - Math.max(0,Math.min(100,v))/100)*plotH; }
+    var svg = "<svg viewBox='0 0 "+W+" "+H+"' role='img' aria-label='National search interest over time'>";
+    [0,25,50,75,100].forEach(function(v){
+      var y=Y(v);
+      svg += "<line x1='"+padL+"' y1='"+y+"' x2='"+(W-padR)+"' y2='"+y+"' stroke='#eef1f4' stroke-width='1'/>";
+      svg += "<text x='"+(padL-6)+"' y='"+(y+3)+"' text-anchor='end' font-size='10' fill='#9aa3ab'>"+v+"</text>";
+    });
+    var dates = (series[0].points||[]).map(function(p){ return p.date; });
+    function shortD(d){ var dt=new Date(d); return isNaN(dt.getTime())? d : dt.toLocaleDateString(undefined,{month:"short",day:"numeric"}); }
+    if(dates.length){
+      svg += "<text x='"+padL+"' y='"+(H-7)+"' font-size='10' fill='#9aa3ab'>"+esc(shortD(dates[0]))+"</text>";
+      svg += "<text x='"+(W-padR)+"' y='"+(H-7)+"' text-anchor='end' font-size='10' fill='#9aa3ab'>"+esc(shortD(dates[dates.length-1]))+"</text>";
+    }
+    series.forEach(function(g, gi){
+      var color = l2Color(g.key, gi);
+      var pts = (g.points||[]).map(function(p,i){ return X(i).toFixed(1)+","+Y(p.value).toFixed(1); }).join(" ");
+      svg += "<polyline points='"+pts+"' fill='none' stroke='"+color+"' stroke-width='"+(g.headline?2.6:1.8)+"' stroke-linejoin='round' stroke-linecap='round'/>";
+      var last = g.points[g.points.length-1];
+      svg += "<circle cx='"+X(g.points.length-1).toFixed(1)+"' cy='"+Y(last.value).toFixed(1)+"' r='3.1' fill='"+color+"'/>";
+    });
+    svg += "</svg>";
+    return svg;
+  }
+
+  function buildL2Legend(series){
+    return series.map(function(g, gi){
+      var color = l2Color(g.key, gi);
+      var d = g.delta_4w || 0;
+      var cls = d>0 ? "l2-up" : (d<0 ? "l2-down" : "l2-flat");
+      var arrow = d>0 ? "▲" : (d<0 ? "▼" : "■");
+      var dtxt = (d===0) ? "no change in 4 weeks" : (arrow+" "+(d>0?"+":"")+d+" over 4 weeks");
+      return "<span class='l2-leg'><span class='sw' style='background:"+color+"'></span>"+
+        esc(g.label)+" <b>"+Math.round(g.latest)+"</b> <span class='l2-delta "+cls+"'>"+dtxt+"</span></span>";
+    }).join("");
+  }
+
+  function l2Bar(v){
+    if(v==null) return "<span class='l2-val'>n/a</span>";
+    var w = Math.max(0,Math.min(100,v));
+    return "<span class='l2-bar-wrap'><span class='l2-bar-track'><span class='l2-bar-fill' style='width:"+w+"%'></span></span>"+
+      "<span class='l2-val'>"+Math.round(v)+"</span></span>";
+  }
+
+  function renderL2Table(){
+    if(!L2DATA) return;
+    var hk = L2DATA.headline_group || "febrile";
+    var groups = (L2DATA.groups||[]).slice().sort(function(a,b){ return (b.headline?1:0)-(a.headline?1:0); });
+    var head = "<tr><th class='num' data-key='rank'>#</th>"+
+               "<th data-key='city'>City <span class='ind'></span></th>"+
+               "<th data-key='state'>State <span class='ind'></span></th>";
+    groups.forEach(function(g){
+      head += "<th class='num' data-key='"+esc(g.key)+"'>"+esc(g.label)+
+        (g.headline ? "<span class='th-hint'>general searches</span>" : "")+" <span class='ind'></span></th>";
+    });
+    head += "</tr>";
+    document.querySelector("#l2-table thead").innerHTML = head;
+
+    var k = (L2SORT.key==="rank") ? hk : L2SORT.key, dir = L2SORT.dir;
+    var rows = (L2DATA.by_city || L2DATA.by_state || []).slice();
+    rows.sort(function(a,b){
+      if(k==="city") return dir*String(a.name||a.state).localeCompare(String(b.name||b.state));
+      if(k==="state") return dir*String(a.state).localeCompare(String(b.state));
+      var va=(a.groups||{})[k], vb=(b.groups||{})[k];
+      if(va==null) va=-Infinity; if(vb==null) vb=-Infinity;
+      return dir*(va-vb);
+    });
+    document.getElementById("l2-body").innerHTML = rows.map(function(e, idx){
+      var tds = "<td class='num rank'>"+(idx+1)+"</td>"+
+                "<td><b>"+esc(e.name||e.state)+"</b></td>"+
+                "<td>"+esc(e.state||"")+"</td>";
+      groups.forEach(function(g){ tds += "<td class='num l2-barcell'>"+l2Bar((e.groups||{})[g.key])+"</td>"; });
+      return "<tr>"+tds+"</tr>";
+    }).join("");
+
+    Array.prototype.forEach.call(document.querySelectorAll("#l2-table thead th"), function(th){
+      th.onclick = function(){
+        var key = th.getAttribute("data-key");
+        if(L2SORT.key===key){ L2SORT.dir *= -1; }
+        else { L2SORT.key = key; L2SORT.dir = (key==="state"||key==="city") ? 1 : -1; }
+        renderL2Table();
+      };
+      var key = th.getAttribute("data-key");
+      if(key===L2SORT.key || (L2SORT.key===hk && key==="rank")) th.setAttribute("aria-sort", L2SORT.dir>0?"ascending":"descending");
+      else th.removeAttribute("aria-sort");
+    });
+  }
+
+  function flipChainCardL2(data){
+    var card = document.getElementById("chain-l2"),
+        st = document.getElementById("chain-l2-status"),
+        src = document.getElementById("chain-l2-src");
+    if(!card || !st) return;
+    if(data.is_sample){ st.className = "status sample"; st.textContent = "Sample"; card.classList.add("preview"); }
+    else { st.className = "status on"; st.textContent = "Live"; card.classList.add("active"); }
+    if(src) src.textContent = data.is_sample ? "Sample data, live search source coming" : "From Google Trends, updated weekly";
+    card.style.cursor = "pointer";
+    card.addEventListener("click", function(){ var s=document.getElementById("fever-signal"); if(s) s.scrollIntoView({behavior:"smooth"}); });
+  }
+})();
+</script>
+</body>
+</html>

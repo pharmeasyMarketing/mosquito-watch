@@ -1,0 +1,291 @@
+{
+  "layer": 3,
+  "layer_name": "Confirmed Cases (IDSP weekly outbreaks)",
+  "model_version": "L3-0.1.0",
+  "generated_at": "2026-05-31T10:43:48+00:00",
+  "source": "live",
+  "attribution": "IDSP Weekly Outbreak Reports, Ministry of Health & Family Welfare (idsp.mohfw.gov.in)",
+  "is_sample": false,
+  "is_live": true,
+  "disclaimer": "Officially reported outbreaks from the IDSP weekly reports. This is real surveillance data, the authoritative ground truth in this dashboard, but it lags by a week or two and it undercounts, because not every illness becomes a reported outbreak. It confirms and validates what the other two layers hint at, in sequence after the weather and the searches. It does not predict, it is not a complete case count, and it is not medical advice. Always defer to your state health department and the official IDSP reports.",
+  "report_week": 15,
+  "report_year": 2026,
+  "week_label": "15th Week, 2026",
+  "period_label": "6th April 2026 to 12th April 2026",
+  "period_start": "2026-04-06",
+  "period_end": "2026-04-12",
+  "report_lag_days": 49,
+  "source_pdf_url": "https://idsp.mohfw.gov.in/WriteReadData/l892s/97194154481779188517.pdf",
+  "listing_url": "https://idsp.mohfw.gov.in/index4.php?lang=1&level=0&linkid=406&lid=3689",
+  "official_home": "https://idsp.mohfw.gov.in/",
+  "diseases": [
+    {
+      "key": "dengue",
+      "label": "Dengue",
+      "headline": true
+    },
+    {
+      "key": "malaria",
+      "label": "Malaria",
+      "headline": false
+    },
+    {
+      "key": "chikungunya",
+      "label": "Chikungunya",
+      "headline": false
+    },
+    {
+      "key": "fever_rash",
+      "label": "Fever with Rash",
+      "headline": false
+    },
+    {
+      "key": "afi",
+      "label": "Acute Febrile Illness",
+      "headline": false
+    }
+  ],
+  "headline_disease": "dengue",
+  "guard": {
+    "status": "ok",
+    "total_outbreaks": 54,
+    "id_anchors": 54,
+    "target_outbreaks": 7
+  },
+  "target_outbreak_count": 7,
+  "total_outbreak_count": 54,
+  "state_count": 6,
+  "totals_by_disease": {
+    "dengue": {
+      "label": "Dengue",
+      "outbreaks": 2,
+      "cases": 32,
+      "deaths": 0,
+      "states": [
+        "Kerala",
+        "Maharashtra"
+      ]
+    },
+    "malaria": {
+      "label": "Malaria",
+      "outbreaks": 0,
+      "cases": 0,
+      "deaths": 0,
+      "states": []
+    },
+    "chikungunya": {
+      "label": "Chikungunya",
+      "outbreaks": 1,
+      "cases": 60,
+      "deaths": 0,
+      "states": [
+        "Kerala"
+      ]
+    },
+    "fever_rash": {
+      "label": "Fever with Rash",
+      "outbreaks": 4,
+      "cases": 60,
+      "deaths": 1,
+      "states": [
+        "Bihar",
+        "Chhattisgarh",
+        "Jharkhand",
+        "West Bengal"
+      ]
+    },
+    "afi": {
+      "label": "Acute Febrile Illness",
+      "outbreaks": 0,
+      "cases": 0,
+      "deaths": 0,
+      "states": []
+    }
+  },
+  "by_state": [
+    {
+      "state": "Kerala",
+      "code": "IN-KL",
+      "diseases": {
+        "chikungunya": {
+          "outbreaks": 1,
+          "cases": 60,
+          "deaths": 0
+        },
+        "dengue": {
+          "outbreaks": 1,
+          "cases": 22,
+          "deaths": 0
+        }
+      },
+      "outbreaks": 2,
+      "cases": 82,
+      "deaths": 0,
+      "district_count": 2,
+      "headline": 22
+    },
+    {
+      "state": "Chhattisgarh",
+      "code": "IN-CT",
+      "diseases": {
+        "fever_rash": {
+          "outbreaks": 1,
+          "cases": 33,
+          "deaths": 0
+        }
+      },
+      "outbreaks": 1,
+      "cases": 33,
+      "deaths": 0,
+      "district_count": 1,
+      "headline": 0
+    },
+    {
+      "state": "West Bengal",
+      "code": "IN-WB",
+      "diseases": {
+        "fever_rash": {
+          "outbreaks": 1,
+          "cases": 13,
+          "deaths": 1
+        }
+      },
+      "outbreaks": 1,
+      "cases": 13,
+      "deaths": 1,
+      "district_count": 1,
+      "headline": 0
+    },
+    {
+      "state": "Maharashtra",
+      "code": "IN-MH",
+      "diseases": {
+        "dengue": {
+          "outbreaks": 1,
+          "cases": 10,
+          "deaths": 0
+        }
+      },
+      "outbreaks": 1,
+      "cases": 10,
+      "deaths": 0,
+      "district_count": 1,
+      "headline": 10
+    },
+    {
+      "state": "Jharkhand",
+      "code": "IN-JH",
+      "diseases": {
+        "fever_rash": {
+          "outbreaks": 1,
+          "cases": 9,
+          "deaths": 0
+        }
+      },
+      "outbreaks": 1,
+      "cases": 9,
+      "deaths": 0,
+      "district_count": 1,
+      "headline": 0
+    },
+    {
+      "state": "Bihar",
+      "code": "IN-BR",
+      "diseases": {
+        "fever_rash": {
+          "outbreaks": 1,
+          "cases": 5,
+          "deaths": 0
+        }
+      },
+      "outbreaks": 1,
+      "cases": 5,
+      "deaths": 0,
+      "district_count": 1,
+      "headline": 0
+    }
+  ],
+  "outbreaks": [
+    {
+      "disease_key": "chikungunya",
+      "disease": "Chikungunya",
+      "state": "Kerala",
+      "district": "Ernakulam",
+      "cases": 60,
+      "deaths": 0,
+      "status": "Under Surveillance",
+      "outbreak_id": "KL/ERN/2026/15/593",
+      "week": 15
+    },
+    {
+      "disease_key": "fever_rash",
+      "disease": "Fever with Rash",
+      "state": "Chhattisgarh",
+      "district": "Baloda Bazar",
+      "cases": 33,
+      "deaths": 0,
+      "status": "Under Surveillance",
+      "outbreak_id": "CT/BAL/2026/15/574",
+      "week": 15
+    },
+    {
+      "disease_key": "dengue",
+      "disease": "Dengue",
+      "state": "Kerala",
+      "district": "Kottayam",
+      "cases": 22,
+      "deaths": 0,
+      "status": "Under Surveillance",
+      "outbreak_id": "KL/KOT/2026/15/595",
+      "week": 15
+    },
+    {
+      "disease_key": "fever_rash",
+      "disease": "Fever with Rash",
+      "state": "West Bengal",
+      "district": "Birbhum",
+      "cases": 13,
+      "deaths": 1,
+      "status": "Under Surveillance",
+      "outbreak_id": "WB/BIR/2026/15/614",
+      "week": 15
+    },
+    {
+      "disease_key": "dengue",
+      "disease": "Dengue",
+      "state": "Maharashtra",
+      "district": "Jalgaon",
+      "cases": 10,
+      "deaths": 0,
+      "status": "Cases",
+      "outbreak_id": "MH/JAL/2026/15/620",
+      "week": 15
+    },
+    {
+      "disease_key": "fever_rash",
+      "disease": "Fever with Rash",
+      "state": "Jharkhand",
+      "district": "Bokaro",
+      "cases": 9,
+      "deaths": 0,
+      "status": "Under Surveillance",
+      "outbreak_id": "JH/BOK/2026/15/585",
+      "week": 15
+    },
+    {
+      "disease_key": "fever_rash",
+      "disease": "Fever with Rash",
+      "state": "Bihar",
+      "district": "Jehanabad",
+      "cases": 5,
+      "deaths": 0,
+      "status": "Cases",
+      "outbreak_id": "BH/JEH/2026/15/616",
+      "week": 15
+    }
+  ],
+  "notes": [
+    "downloaded from idsp-server"
+  ],
+  "page_count": 30
+}
