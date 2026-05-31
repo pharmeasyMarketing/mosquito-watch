@@ -584,11 +584,13 @@
   .ks-title{margin:0 0 12px; font-size:16px; font-weight:800; color:var(--ink); padding-left:10px; border-left:3px solid var(--pe-teal)}
   .ks-msg .ks-num{font-size:15px; line-height:1.3; color:var(--pe-teal-darker)}
   .ks-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:10px}
-  .ks-tile{border:1px solid var(--line); border-left:3px solid var(--pe-teal); border-radius:10px; padding:9px 12px; background:var(--pe-tint-2)}
-  .ks-num{font-size:22px; font-weight:800; color:var(--ink); letter-spacing:-.4px; font-variant-numeric:tabular-nums; line-height:1.1}
+  .ks-tile{border:1px solid var(--line); border-left:3px solid var(--pe-teal); border-radius:10px; padding:9px 12px; background:var(--pe-tint-2); min-width:0}
+  .ks-num{font-size:22px; font-weight:800; color:var(--ink); letter-spacing:-.4px; font-variant-numeric:tabular-nums; line-height:1.15; overflow-wrap:anywhere}
   .ks-label{font-size:11.5px; color:var(--muted); margin-top:3px}
   .ks-sum{font-size:13px; color:var(--text); margin:0}
   .ks-sum b{color:var(--ink)}
+  /* phones: stack the at-a-glance tiles so long city names fit on one line */
+  @media (max-width:560px){ .ks-grid{grid-template-columns:1fr} }
   /* ---- FAQ (visible Q/A; mirrored into FAQPage JSON-LD at build time) ---- */
   .faq .qa{padding:13px 16px; border-top:1px solid var(--line)}
   .faq .qa:first-child{border-top:none}
