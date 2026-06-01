@@ -1,7 +1,7 @@
 {
   "name": "Mosquito Watch by PharmEasy",
   "short_name": "Mosquito Watch",
-  "description": "Track dengue, malaria and chikungunya conditions across India through breeding weather, fever searches and officially confirmed cases. A weather-based screening guide, not a case forecast or medical advice.",
+  "description": "Track dengue, malaria and chikungunya across India through three signals: breeding weather, fever searches and lab test positivity. A weather-based screening guide, not a case forecast or medical advice.",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",

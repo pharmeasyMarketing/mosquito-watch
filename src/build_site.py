@@ -241,6 +241,53 @@ def render_l3_rows(season):
     return "".join(out)
 
 
+# ---- Layer 3 v1: Fever Panel pre-render (mirror index.html renderPanelCards) ----
+PANEL_COLORS = {"tests": "#2f7d76", "dengue": "#2c6e9b", "malaria": "#6a8d3b", "chikungunya": "#7d5ba6", "typhoid": "#c47f17"}
+
+
+def panel_color(key, i):
+    return PANEL_COLORS.get(key) or L3_FALLBACK[i % len(L3_FALLBACK)]
+
+
+def fmt_count(v):
+    """Mirror index.html fmtCount(): compact test counts (432350 -> 432k, 24350 -> 24.4k)."""
+    try:
+        v = int(round(float(v)))
+    except (TypeError, ValueError):
+        return str(v)
+    if v >= 100000:
+        return "%dk" % round(v / 1000)
+    if v >= 1000:
+        return "%sk" % (round(v / 100) / 10)
+    return str(v)
+
+
+def render_panel_cards(panel):
+    """Mirror renderPanelCards() in index.html: one tests headline card + per-disease positivity cards."""
+    sm = panel.get("summary") or {}
+    diseases = panel.get("diseases") or []
+    ly = (panel.get("season") or {}).get("last_year", 2025)
+    ts = sm.get("tests") or {}
+    out = ["<div class='l3-card' style='border-top-color:%s'>"
+           "<div class='l3-card-name'><span class='l3-dot' style='background:%s'></span>Fever Panel tests</div>"
+           "<div class='l3-card-cases'>%s<span class='l3-card-unit'>booked</span></div>"
+           "<div class='l3-card-sub'>Across the %s season</div>%s</div>"
+           % (panel_color("tests", 0), panel_color("tests", 0), fmt_count(ts.get("last_total", 0)), ly,
+              ("<div class='l3-card-peak'>Peak %s/week in %s</div>"
+               % (fmt_count(ts.get("last_peak_value", 0)), esc(ts.get("last_peak_month", "")))) if ts.get("last_peak_month") else "")]
+    pos = sm.get("positivity") or {}
+    for i, d in enumerate(diseases):
+        ps = pos.get(d["key"]) or {}
+        c = panel_color(d["key"], i)
+        out.append("<div class='l3-card' style='border-top-color:%s'>"
+                   "<div class='l3-card-name'><span class='l3-dot' style='background:%s'></span>%s</div>"
+                   "<div class='l3-card-cases'>%s<span class='l3-card-unit'>%%</span></div>"
+                   "<div class='l3-card-sub'>Peak positivity (%s)</div>%s</div>"
+                   % (c, c, esc(d["label"]), ps.get("last_peak_value", 0), ly,
+                      ("<div class='l3-card-peak'>Around %s</div>" % esc(ps.get("last_peak_month", ""))) if ps.get("last_peak_month") else ""))
+    return "".join(out)
+
+
 def l2_headline_point(l2):
     """Latest national headline (fever) search interest, with a year-over-year direction.
     Returns {val, label, dir} or None. dir is 'above' / 'below' / 'level with' / None."""
@@ -311,24 +358,26 @@ FAQ_ITEMS = [
      "measure of your personal chance of illness."),
     ("Where does the data come from?",
      "Three independent sources, kept separate. Breeding weather comes from Open-Meteo. The fever signal "
-     "comes from Google Trends search interest. Confirmed cases come from the official IDSP weekly outbreak "
-     "reports published by India's Ministry of Health and Family Welfare."),
+     "comes from Google Trends search interest. The third signal, a Fever Panel testing view, is coming soon "
+     "and will draw on PharmEasy's own lab diagnostics: how many fever tests people book and how often they "
+     "come back positive."),
     ("Is this medical advice or a case forecast?",
      "No. Mosquito Watch is an environmental risk and surveillance dashboard, not a diagnostic or "
      "predictive tool. It never predicts individual illness or forecasts case counts. For diagnosis or "
-     "treatment consult a doctor, and for official alerts follow your state health department and IDSP."),
+     "treatment consult a doctor, and for official alerts follow your state health department and local "
+     "public-health sources."),
     ("How often is it updated?",
-     "Breeding weather updates daily. The fever signal updates weekly. Confirmed cases follow the IDSP "
-     "weekly reports, which lag by a week or two, so Layer 3 reviews a finished season rather than counting "
-     "live."),
+     "Breeding weather updates daily and the fever signal weekly. The Fever Panel testing signal is a "
+     "preview on sample data for now; when it goes live it will refresh weekly from PharmEasy's lab "
+     "diagnostics."),
     ("What do the risk levels mean?",
      "Scores are grouped into four bands: Low (0 to 24), Moderate (25 to 49), High (50 to 74) and Very High "
      "(75 to 100). The bands compare cities against each other by weather only. They are not the chance of "
      "mosquitoes being present, of disease spreading, or of anyone falling ill."),
     ("Why keep the three layers separate instead of a single score?",
-     "Because they measure different things on different timelines. Weather conditions tend to lead, fever "
-     "searches follow, and confirmed cases come last. Keeping them apart is more honest and easier to check "
-     "than blending them into one number."),
+     "Because they measure different things on different timelines. Weather tends to lead, fever searches "
+     "follow, and testing comes last. Keeping them apart is more honest and easier to check than blending "
+     "them into one number."),
 ]
 
 
@@ -375,7 +424,7 @@ def freshest(*datasets):
     return max(stamps) if stamps else None
 
 
-def build_jsonld(cfg, l1, l2, season, latest):
+def build_jsonld(cfg, l1, l2, panel):
     base = cfg["base_url"]
     pub = cfg["publisher"]
     org_id = base + "#organization"
@@ -405,7 +454,7 @@ def build_jsonld(cfg, l1, l2, season, latest):
         "description": cfg["description"],
         "about": ["Dengue", "Malaria", "Chikungunya", "Mosquito-borne disease surveillance in India"],
         "image": base + cfg["og_image"],
-        "dateModified": freshest(l1, l2, season, latest),
+        "dateModified": freshest(l1, l2, panel),
         "isPartOf": {"@id": site_id},
         "creator": {"@id": org_id},
         "publisher": {"@id": org_id},
@@ -466,29 +515,10 @@ def build_jsonld(cfg, l1, l2, season, latest):
         "dateModified": l2.get("generated_at"),
     }
 
-    ws, we = season.get("window_start"), season.get("window_end")
-    ds_confirmed = {
-        "@type": "Dataset", "@id": base + "#dataset-confirmed-cases",
-        "name": "Confirmed mosquito-borne disease outbreaks in India, 2025 monsoon (IDSP)",
-        "description": ("Officially reported outbreaks, cases and deaths for dengue, malaria, chikungunya and fever "
-                        "with rash, by state and week, across the 2025 monsoon. Extracted from the IDSP weekly "
-                        "outbreak reports. Authoritative but lagging surveillance data that undercounts, because not "
-                        "every illness becomes a reported outbreak."),
-        "url": base, "inLanguage": cfg.get("language", "en-IN"),
-        "isAccessibleForFree": True,
-        "creator": {"@id": org_id}, "publisher": {"@id": org_id},
-        "creditText": season.get("attribution", "IDSP Weekly Outbreak Reports, Ministry of Health and Family Welfare"),
-        "isBasedOn": season.get("listing_url"),
-        "keywords": ["dengue", "malaria", "chikungunya", "fever with rash", "IDSP", "outbreak surveillance", "India", "2025 monsoon"],
-        "spatialCoverage": india_place,
-        "temporalCoverage": ("%s/%s" % (ws, we)) if (ws and we) else None,
-        "variableMeasured": ["reported outbreaks", "confirmed cases", "deaths"],
-        "distribution": {"@type": "DataDownload", "encodingFormat": "application/json",
-                         "contentUrl": base + "data/confirmed_season.json"},
-        "dateModified": season.get("generated_at"),
-    }
-
-    graph = [org, website, webapp, ds_breeding, ds_fever, ds_confirmed, faqpage_schema()]
+    # Layer 3 is the Fever Panel (PharmEasy lab diagnostics), currently a coming-soon mock on
+    # sample data, so we deliberately emit NO Dataset node for it (claiming a dataset that is not
+    # yet real would mislead crawlers). Restore a Dataset node here when the live feed is wired.
+    graph = [org, website, webapp, ds_breeding, ds_fever, faqpage_schema()]
     doc = {"@context": "https://schema.org", "@graph": graph}
     return doc
 
@@ -508,7 +538,7 @@ def head_meta(cfg):
     desc = esc(cfg["description"])
     og_title = esc(cfg.get("og_title", cfg["title"].split(" | ")[0] + " | " + "Dengue & Malaria Risk in India"))
     og_desc = esc(cfg.get("og_description",
-                          "Breeding weather, fever searches and officially confirmed cases for dengue, malaria and "
+                          "Breeding weather, fever searches and lab test positivity for dengue, malaria and "
                           "chikungunya across India. A screening guide, not medical advice."))
     img_alt = esc(cfg.get("og_image_alt", cfg["site_name"]))
     lines = [
@@ -616,11 +646,12 @@ def main():
     cfg = load("config/site.json")
     l1 = load("data/data.json")
     l2 = load("data/fever_signal.json")
-    season = load("data/confirmed_season.json")
+    # Layer 3 v1 = Fever Panel (coming-soon mock). The old IDSP confirmed_season.json /
+    # confirmed_cases.json stay in the repo, switchable, but are no longer pre-rendered.
     try:
-        latest = load("data/confirmed_cases.json")
+        panel = load("data/panel_signal.json")
     except FileNotFoundError:
-        latest = {}
+        panel = {}
 
     cities = l1.get("cities") or []
 
@@ -630,7 +661,7 @@ def main():
 
     # --- head: meta + JSON-LD
     html = set_marker(html, "seo", head_meta(cfg))
-    html = set_marker(html, "jsonld", "\n" + jsonld_script(build_jsonld(cfg, l1, l2, season, latest)) + "\n")
+    html = set_marker(html, "jsonld", "\n" + jsonld_script(build_jsonld(cfg, l1, l2, panel)) + "\n")
 
     # --- pre-rendered content blocks (mirror the JS templates)
     html = set_marker(html, "keystats", render_keystats(l1, l2))
@@ -638,41 +669,24 @@ def main():
     html = set_inner_by_id(html, "summary-chips", render_summary_chips(cities))
     html = set_inner_by_id(html, "level-guide", render_level_guide())
     html = set_inner_by_id(html, "risk-body", render_risk_rows(cities))
-    html = set_inner_by_id(html, "l3-cards", render_l3_cards(season))
-    html = set_inner_by_id(html, "l3-thead", render_l3_thead(season))
-    html = set_inner_by_id(html, "l3-body", render_l3_rows(season))
+    if panel:
+        html = set_inner_by_id(html, "panel-cards", render_panel_cards(panel), required=False)
+        html = set_inner_by_id(
+            html, "panel-asof",
+            "Preview, sample data" if panel.get("is_sample")
+            else ("From " + esc(panel.get("attribution", "PharmEasy Diagnostics"))),
+            required=False,
+        )
 
     # --- small text containers (freshness / attribution)
-    last_iso = freshest(l1, l2, season, latest)
+    last_iso = freshest(l1, l2, panel)
     html = set_inner_by_id(html, "meta", "<div><b>Last updated:</b> %s</div>" % esc(pretty_date(last_iso)))
     asof = (cities[0].get("inputs") or {}).get("as_of_date") if cities else None
     html = set_inner_by_id(html, "asof-tag", ("weather as of %s" % esc(asof)) if asof else "", required=False)
-    weeks_parsed = (season.get("season_totals") or {}).get("weeks_parsed") or len(season.get("weeks") or [])
-    html = set_inner_by_id(
-        html, "l3-asof",
-        "%s, %d weekly reports, built %s" % (esc(season.get("season_label", "season")), weeks_parsed, esc(pretty_date(season.get("generated_at")))),
-        required=False,
-    )
-    total_cases = sum((season.get("totals_by_disease") or {}).get(d["key"], {}).get("cases", 0) or 0
-                      for d in (season.get("diseases") or []))
-    html = set_inner_by_id(
-        html, "l3-denominator",
-        "Drawn from %d weekly IDSP reports; the diseases we follow saw %s confirmed cases across the 2025 monsoon."
-        % (weeks_parsed, thousands(total_cases)),
-        required=False,
-    )
     html = set_inner_by_id(
         html, "footer-attr",
         "Weather for Layer 1 comes from %s. Map tiles &copy; OpenStreetMap contributors and &copy; CARTO."
         % esc(l1.get("attribution", "Open-Meteo")),
-        required=False,
-    )
-    # JS-only chart: a visually-hidden text fallback for no-JS / screen readers
-    headline = next((d["label"] for d in (season.get("diseases") or []) if d.get("key") == season.get("headline_disease")), "dengue")
-    html = set_inner_by_id(
-        html, "l3-chart",
-        "<p class='vh'>A weekly chart of confirmed %s cases across India through the %s monsoon season. "
-        "The full weekly data is in data/confirmed_season.json.</p>" % (esc(headline), esc(season.get("season_year", "2025"))),
         required=False,
     )
 
@@ -687,8 +701,8 @@ def main():
     write_manifest(cfg)
 
     print("build_site: ok (env=%s)" % env)
-    print("  index.html pre-rendered: %d cities, %d L3 states, FAQ x%d, JSON-LD graph x%d"
-          % (len(cities), len(season.get("by_state") or []), len(FAQ_ITEMS), 7))
+    print("  index.html pre-rendered: %d cities, Fever Panel cards x%d, FAQ x%d, JSON-LD graph x%d"
+          % (len(cities), (len(panel.get("diseases") or []) + 1) if panel else 0, len(FAQ_ITEMS), 6))
     print("  wrote robots.txt, sitemap.xml (lastmod %s), site.webmanifest" % (iso_date(last_iso) or "n/a"))
 
 

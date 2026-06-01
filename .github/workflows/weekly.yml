@@ -1,4 +1,4 @@
-name: Weekly - Layer 2 fever signal + Layer 3 latest report
+name: Weekly - Layer 2 fever signal
 
 # Refreshes Layer 2 (Fever Signal via SerpApi) and the Layer 3 latest IDSP report
 # once a week. A failure of either source is non-fatal: the step is allowed to fail
@@ -48,9 +48,17 @@ jobs:
           SERPAPI_KEY_4: ${{ secrets.SERPAPI_KEY_4 }}
           SERPAPI_KEY_5: ${{ secrets.SERPAPI_KEY_5 }}
 
-      - name: Build Layer 3 latest report (IDSP, live)
-        continue-on-error: true
-        run: python src/build_layer3.py --source live
+      # Layer 3 is now the Fever Panel (PharmEasy diagnostics), a committed mock/preview, so there is
+      # no weekly IDSP fetch. The old "Confirmed Cases" step is parked but switchable -- uncomment to restore.
+      # - name: Build Layer 3 latest report (IDSP, live)
+      #   continue-on-error: true
+      #   run: python src/build_layer3.py --source live
+      #
+      # When the weekly Fever Panel backend feed is wired (config/panel.json -> google_sheet.csv_url),
+      # enable this to refresh the this-year series:
+      # - name: Build Layer 3 Fever Panel (live feed)
+      #   continue-on-error: true
+      #   run: python src/build_layer3_panel.py --provider googlesheet
 
       - name: Pre-render site
         run: python src/build_site.py
@@ -65,7 +73,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "chore(data): weekly Layer 2 + Layer 3 latest refresh [skip ci]"
+            git commit -m "chore(data): weekly Layer 2 fever signal refresh [skip ci]"
             git pull --rebase --autostash origin main || true
             git push
           fi

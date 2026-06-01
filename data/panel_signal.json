@@ -1,0 +1,770 @@
+{
+  "layer": 3,
+  "layer_name": "Fever Panel (PharmEasy lab diagnostics)",
+  "view": "panel",
+  "model_version": "L3P-0.1.0",
+  "generated_at": "2026-06-01T07:51:56+00:00",
+  "source": "mock",
+  "provider": "mock",
+  "attribution": "SAMPLE synthetic data for development -- not real PharmEasy diagnostics",
+  "is_sample": true,
+  "status": "coming_soon",
+  "disclaimer": "A preview built on sample data. When it goes live this layer draws on PharmEasy's own Fever Panel lab diagnostics: how many fever tests people book (a demand signal) and how often they come back positive for each disease (a confirmation signal), this monsoon season against last. It is a lab-testing signal, not a count of all cases and not medical advice. It stands on its own and is not added to the breeding-weather score or the search signal above.",
+  "season": {
+    "this_year": 2026,
+    "last_year": 2025,
+    "start_month": 5,
+    "end_month": 10
+  },
+  "season_label": "monsoon season (May to October)",
+  "metrics": [
+    {
+      "key": "tests",
+      "label": "Tests booked",
+      "unit": "tests",
+      "kind": "count",
+      "headline": true,
+      "blurb": "How many Fever Panel tests people booked, week by week. A demand signal."
+    },
+    {
+      "key": "positivity",
+      "label": "Positivity",
+      "unit": "%",
+      "kind": "percent",
+      "headline": false,
+      "blurb": "Of the panels run, the share that came back positive for each disease. A confirmation signal."
+    }
+  ],
+  "headline_metric": "tests",
+  "diseases": [
+    {
+      "key": "dengue",
+      "label": "Dengue",
+      "headline": true
+    },
+    {
+      "key": "malaria",
+      "label": "Malaria",
+      "headline": false
+    },
+    {
+      "key": "chikungunya",
+      "label": "Chikungunya",
+      "headline": false
+    },
+    {
+      "key": "typhoid",
+      "label": "Typhoid",
+      "headline": false
+    }
+  ],
+  "headline_disease": "dengue",
+  "tests": {
+    "label": "Tests booked",
+    "unit": "tests",
+    "kind": "count",
+    "seasons": {
+      "2025": [
+        [
+          0,
+          7650
+        ],
+        [
+          1,
+          7900
+        ],
+        [
+          2,
+          8200
+        ],
+        [
+          3,
+          8450
+        ],
+        [
+          4,
+          9100
+        ],
+        [
+          5,
+          9850
+        ],
+        [
+          6,
+          11000
+        ],
+        [
+          7,
+          12350
+        ],
+        [
+          8,
+          13200
+        ],
+        [
+          9,
+          15150
+        ],
+        [
+          10,
+          16900
+        ],
+        [
+          11,
+          18200
+        ],
+        [
+          12,
+          19200
+        ],
+        [
+          13,
+          21200
+        ],
+        [
+          14,
+          22350
+        ],
+        [
+          15,
+          23850
+        ],
+        [
+          16,
+          24200
+        ],
+        [
+          17,
+          23850
+        ],
+        [
+          18,
+          24350
+        ],
+        [
+          19,
+          23500
+        ],
+        [
+          20,
+          21900
+        ],
+        [
+          21,
+          20650
+        ],
+        [
+          22,
+          19500
+        ],
+        [
+          23,
+          18000
+        ],
+        [
+          24,
+          16750
+        ],
+        [
+          25,
+          15100
+        ]
+      ],
+      "2026": [
+        [
+          0,
+          8000
+        ],
+        [
+          1,
+          8500
+        ],
+        [
+          2,
+          9000
+        ],
+        [
+          3,
+          9200
+        ],
+        [
+          4,
+          10100
+        ]
+      ]
+    }
+  },
+  "positivity": {
+    "unit": "%",
+    "kind": "percent",
+    "by_disease": {
+      "dengue": {
+        "label": "Dengue",
+        "seasons": {
+          "2025": [
+            [
+              0,
+              4.7
+            ],
+            [
+              1,
+              4.6
+            ],
+            [
+              2,
+              5.4
+            ],
+            [
+              3,
+              4.4
+            ],
+            [
+              4,
+              4.7
+            ],
+            [
+              5,
+              5.1
+            ],
+            [
+              6,
+              6
+            ],
+            [
+              7,
+              7.1
+            ],
+            [
+              8,
+              7.5
+            ],
+            [
+              9,
+              9
+            ],
+            [
+              10,
+              10
+            ],
+            [
+              11,
+              11.3
+            ],
+            [
+              12,
+              13.9
+            ],
+            [
+              13,
+              17.9
+            ],
+            [
+              14,
+              20.7
+            ],
+            [
+              15,
+              23.7
+            ],
+            [
+              16,
+              25.6
+            ],
+            [
+              17,
+              27.4
+            ],
+            [
+              18,
+              28.9
+            ],
+            [
+              19,
+              29.8
+            ],
+            [
+              20,
+              29.9
+            ],
+            [
+              21,
+              28.5
+            ],
+            [
+              22,
+              26.3
+            ],
+            [
+              23,
+              22.6
+            ],
+            [
+              24,
+              20.9
+            ],
+            [
+              25,
+              17.8
+            ]
+          ],
+          "2026": [
+            [
+              0,
+              4.9
+            ],
+            [
+              1,
+              5.2
+            ],
+            [
+              2,
+              5.1
+            ],
+            [
+              3,
+              5.4
+            ],
+            [
+              4,
+              5.3
+            ]
+          ]
+        }
+      },
+      "malaria": {
+        "label": "Malaria",
+        "seasons": {
+          "2025": [
+            [
+              0,
+              4.4
+            ],
+            [
+              1,
+              4.3
+            ],
+            [
+              2,
+              5.2
+            ],
+            [
+              3,
+              4.3
+            ],
+            [
+              4,
+              5.4
+            ],
+            [
+              5,
+              5.2
+            ],
+            [
+              6,
+              5.9
+            ],
+            [
+              7,
+              7.5
+            ],
+            [
+              8,
+              7.9
+            ],
+            [
+              9,
+              9.3
+            ],
+            [
+              10,
+              10.1
+            ],
+            [
+              11,
+              11.6
+            ],
+            [
+              12,
+              11.7
+            ],
+            [
+              13,
+              14.3
+            ],
+            [
+              14,
+              14
+            ],
+            [
+              15,
+              15
+            ],
+            [
+              16,
+              16
+            ],
+            [
+              17,
+              16.4
+            ],
+            [
+              18,
+              15.7
+            ],
+            [
+              19,
+              15.8
+            ],
+            [
+              20,
+              14.4
+            ],
+            [
+              21,
+              13.9
+            ],
+            [
+              22,
+              12.1
+            ],
+            [
+              23,
+              11.9
+            ],
+            [
+              24,
+              9.6
+            ],
+            [
+              25,
+              9.7
+            ]
+          ],
+          "2026": [
+            [
+              0,
+              4.2
+            ],
+            [
+              1,
+              4.3
+            ],
+            [
+              2,
+              4.4
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              4,
+              5.3
+            ]
+          ]
+        }
+      },
+      "chikungunya": {
+        "label": "Chikungunya",
+        "seasons": {
+          "2025": [
+            [
+              0,
+              2.3
+            ],
+            [
+              1,
+              2.2
+            ],
+            [
+              2,
+              2.4
+            ],
+            [
+              3,
+              2.8
+            ],
+            [
+              4,
+              2.4
+            ],
+            [
+              5,
+              2.6
+            ],
+            [
+              6,
+              2.2
+            ],
+            [
+              7,
+              2.5
+            ],
+            [
+              8,
+              2.2
+            ],
+            [
+              9,
+              2.8
+            ],
+            [
+              10,
+              3.2
+            ],
+            [
+              11,
+              3.1
+            ],
+            [
+              12,
+              4.9
+            ],
+            [
+              13,
+              5.8
+            ],
+            [
+              14,
+              6.7
+            ],
+            [
+              15,
+              7.3
+            ],
+            [
+              16,
+              8
+            ],
+            [
+              17,
+              9.6
+            ],
+            [
+              18,
+              9.5
+            ],
+            [
+              19,
+              10.7
+            ],
+            [
+              20,
+              11
+            ],
+            [
+              21,
+              10.2
+            ],
+            [
+              22,
+              10.6
+            ],
+            [
+              23,
+              9.1
+            ],
+            [
+              24,
+              8.4
+            ],
+            [
+              25,
+              7.7
+            ]
+          ],
+          "2026": [
+            [
+              0,
+              2.1
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              2
+            ],
+            [
+              3,
+              1.9
+            ],
+            [
+              4,
+              2.1
+            ]
+          ]
+        }
+      },
+      "typhoid": {
+        "label": "Typhoid",
+        "seasons": {
+          "2025": [
+            [
+              0,
+              10.4
+            ],
+            [
+              1,
+              11.2
+            ],
+            [
+              2,
+              11.6
+            ],
+            [
+              3,
+              13.4
+            ],
+            [
+              4,
+              13.8
+            ],
+            [
+              5,
+              14.2
+            ],
+            [
+              6,
+              16.2
+            ],
+            [
+              7,
+              17.4
+            ],
+            [
+              8,
+              18.7
+            ],
+            [
+              9,
+              19.2
+            ],
+            [
+              10,
+              20.4
+            ],
+            [
+              11,
+              20.8
+            ],
+            [
+              12,
+              21.1
+            ],
+            [
+              13,
+              21.9
+            ],
+            [
+              14,
+              21.2
+            ],
+            [
+              15,
+              21.9
+            ],
+            [
+              16,
+              22.1
+            ],
+            [
+              17,
+              21.2
+            ],
+            [
+              18,
+              20.5
+            ],
+            [
+              19,
+              19.2
+            ],
+            [
+              20,
+              18.8
+            ],
+            [
+              21,
+              17.5
+            ],
+            [
+              22,
+              15
+            ],
+            [
+              23,
+              14.5
+            ],
+            [
+              24,
+              13.4
+            ],
+            [
+              25,
+              12.8
+            ]
+          ],
+          "2026": [
+            [
+              0,
+              11.2
+            ],
+            [
+              1,
+              10.9
+            ],
+            [
+              2,
+              12.6
+            ],
+            [
+              3,
+              13.2
+            ],
+            [
+              4,
+              13.4
+            ]
+          ]
+        }
+      }
+    }
+  },
+  "summary": {
+    "tests": {
+      "last_total": 432350,
+      "last_peak_value": 24350,
+      "last_peak_week": 18,
+      "last_peak_month": "September",
+      "this_count": 5
+    },
+    "positivity": {
+      "dengue": {
+        "last_peak_value": 29.9,
+        "last_peak_week": 20,
+        "last_peak_month": "September"
+      },
+      "malaria": {
+        "last_peak_value": 16.4,
+        "last_peak_week": 17,
+        "last_peak_month": "August"
+      },
+      "chikungunya": {
+        "last_peak_value": 11,
+        "last_peak_week": 20,
+        "last_peak_month": "September"
+      },
+      "typhoid": {
+        "last_peak_value": 22.1,
+        "last_peak_week": 16,
+        "last_peak_month": "August"
+      }
+    }
+  },
+  "guard": {
+    "status": "ok",
+    "min_points_per_series": 4
+  }
+}

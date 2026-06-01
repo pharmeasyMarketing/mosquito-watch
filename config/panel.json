@@ -1,0 +1,47 @@
+{
+  "_comment": "Editable config for Layer 3 v1 (Fever Panel). Source = PharmEasy's own lab diagnostics. Two metrics shown year-over-year (this monsoon season vs last): (1) TESTS BOOKED -- overall Fever Panel demand, one line; (2) POSITIVITY -- the share of those tests coming back positive, broken down by disease. This REPLACES the old IDSP 'Confirmed Cases' layer (kept commented-out and switchable in index.html / build_site.py / the workflows). The current data is a MOCK (is_sample=true, status=coming_soon): src/build_layer3_panel.py with the 'mock' provider writes deterministic synthetic numbers, clearly badged as sample, until the real weekly backend feed is wired. Change metrics/diseases/window freely; no code edits needed.",
+  "model_version": "L3P-0.1.0",
+
+  "_source_comment": "Active provider. 'mock' (default) writes deterministic sample data. 'googlesheet' (stub, not yet live) will read the weekly backend export for the this_year series -- see the google_sheet block. Override with --provider or PANEL_SOURCE.",
+  "source": "mock",
+
+  "season": {
+    "_comment": "Year-over-year window. last_year is the full historical reference; this_year fills in week by week from the backend. start_month..end_month bound the monsoon window so this layer lines up with Layers 1 and 2 for the eventual three-layer backtest.",
+    "this_year": 2026,
+    "last_year": 2025,
+    "start_month": 5,
+    "end_month": 10
+  },
+
+  "_metrics_comment": "The two trends. `kind` drives the chart y-axis + tick format: 'count' (tests booked, k-suffixed) or 'percent' (positivity, %). `headline` is the metric shown first. Positivity is split by disease; tests booked is the overall panel total (one line).",
+  "metrics": [
+    { "key": "tests",      "label": "Tests booked", "unit": "tests", "kind": "count",   "headline": true,
+      "blurb": "How many Fever Panel tests people booked, week by week. A demand signal." },
+    { "key": "positivity", "label": "Positivity",   "unit": "%",     "kind": "percent",
+      "blurb": "Of the panels run, the share that came back positive for each disease. A confirmation signal." }
+  ],
+
+  "_diseases_comment": "Diseases the Fever Panel reports positivity for. Dengue, Malaria, Chikungunya match the rest of the dashboard; Typhoid is a standard febrile-panel component. `headline` is the default-selected disease.",
+  "diseases": [
+    { "key": "dengue",      "label": "Dengue",      "headline": true },
+    { "key": "malaria",     "label": "Malaria"      },
+    { "key": "chikungunya", "label": "Chikungunya"  },
+    { "key": "typhoid",     "label": "Typhoid"      }
+  ],
+
+  "google_sheet": {
+    "_comment": "NOT YET WIRED. When the backend publishes the weekly this_year feed as a Google Sheet, set csv_url to its published-to-web CSV link (File -> Share -> Publish to web -> CSV) and switch source to 'googlesheet'. The stub provider (src/panel_providers/googlesheet.py) reads that CSV, maps the columns below, and supplies the this_year series; last_year stays the committed historical reference. Stdlib only (urllib + csv); no new dependency.",
+    "csv_url": "",
+    "columns": {
+      "week": "week",
+      "period_start": "week_start",
+      "tests_booked": "fever_panel_tests",
+      "positivity_prefix": "positivity_"
+    }
+  },
+
+  "sanity": {
+    "_comment": "Fail-loud guard rails (same philosophy as Layers 1 and 2). The build aborts and writes nothing if the tests series is missing, if any tracked disease has no positivity series, or if a series has fewer than min_points_per_series points. A broken feed must never silently feed a branded dashboard.",
+    "min_points_per_series": 4
+  }
+}

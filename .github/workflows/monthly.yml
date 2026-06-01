@@ -1,4 +1,4 @@
-name: Monthly - Layer 3 season retrospective
+name: Monthly - site redeploy (Layer 3 IDSP season parked)
 
 # Rebuilds the Layer 3 season retrospective (re-parses the IDSP weekly reports across the
 # season window from config/idsp.json) once a month. The build's own data-quality guard
@@ -33,9 +33,11 @@ jobs:
       - name: Install dependencies (pdfplumber for Layer 3 PDF parsing)
         run: pip install -r requirements.txt
 
-      - name: Build Layer 3 season retrospective (IDSP)
-        continue-on-error: true
-        run: python src/build_layer3_season.py
+      # Layer 3 is now the Fever Panel (a committed mock/preview), so the monthly IDSP season rebuild
+      # is parked but switchable -- uncomment to restore the "Confirmed Cases" retrospective.
+      # - name: Build Layer 3 season retrospective (IDSP)
+      #   continue-on-error: true
+      #   run: python src/build_layer3_season.py
 
       - name: Pre-render site
         run: python src/build_site.py
