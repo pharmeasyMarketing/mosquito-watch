@@ -2,7 +2,7 @@
   "layer": 1,
   "layer_name": "Breeding Risk (weather-driven)",
   "model_version": "L1-0.2.0",
-  "generated_at": "2026-06-02T06:13:19+00:00",
+  "generated_at": "2026-06-03T06:27:30+00:00",
   "provider": "open-meteo",
   "attribution": "Weather data by Open-Meteo.com (CC BY 4.0)",
   "disclaimer": "Weather-only mosquito breeding-favourability score for city-level screening and comparison. Not a disease forecast, case prediction, official alert, or individual health-risk estimate. Best read alongside official surveillance and local field observations.",
@@ -61,22 +61,22 @@
       "state": "Kerala",
       "lat": 8.5241,
       "lon": 76.9366,
-      "score": 94.6,
+      "score": 96.9,
       "bucket": "Very High",
       "components": {
         "temperature_suitability": 1.0,
         "humidity": 1.0,
-        "rain_recent": 0.862,
-        "rain_lagged": 0.957
+        "rain_recent": 0.944,
+        "rain_lagged": 0.963
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 26.6,
-        "temp_max_c": 29.1,
-        "temp_min_c": 24.8,
-        "humidity_pct": 88.8,
-        "rain_recent_mm": 59.5,
-        "rain_lagged_mm": 94.6,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 26.5,
+        "temp_max_c": 28.4,
+        "temp_min_c": 24.1,
+        "humidity_pct": 88.9,
+        "rain_recent_mm": 86.7,
+        "rain_lagged_mm": 98.6,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
       }
@@ -86,22 +86,22 @@
       "state": "Kerala",
       "lat": 9.9312,
       "lon": 76.2673,
-      "score": 93.4,
+      "score": 94.8,
       "bucket": "Very High",
       "components": {
         "temperature_suitability": 1.0,
         "humidity": 1.0,
-        "rain_recent": 0.851,
-        "rain_lagged": 0.935
+        "rain_recent": 0.927,
+        "rain_lagged": 0.924
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
+        "as_of_date": "2026-06-03",
         "temp_mean_c": 27.2,
-        "temp_max_c": 28.8,
-        "temp_min_c": 24.6,
-        "humidity_pct": 87.4,
-        "rain_recent_mm": 57.2,
-        "rain_lagged_mm": 82.2,
+        "temp_max_c": 29.6,
+        "temp_min_c": 25.2,
+        "humidity_pct": 87.1,
+        "rain_recent_mm": 78.4,
+        "rain_lagged_mm": 77.4,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
       }
@@ -111,22 +111,22 @@
       "state": "Assam",
       "lat": 26.1445,
       "lon": 91.7362,
-      "score": 80.9,
+      "score": 78.2,
       "bucket": "Very High",
       "components": {
         "temperature_suitability": 1.0,
         "humidity": 1.0,
-        "rain_recent": 0.467,
-        "rain_lagged": 0.872
+        "rain_recent": 0.309,
+        "rain_lagged": 0.898
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 27.5,
-        "temp_max_c": 32.9,
-        "temp_min_c": 26.0,
-        "humidity_pct": 80.4,
-        "rain_recent_mm": 18.9,
-        "rain_lagged_mm": 61.7,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 28.2,
+        "temp_max_c": 32.8,
+        "temp_min_c": 25.3,
+        "humidity_pct": 78.5,
+        "rain_recent_mm": 11.1,
+        "rain_lagged_mm": 68.6,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
       }
@@ -136,22 +136,22 @@
       "state": "Karnataka",
       "lat": 12.9716,
       "lon": 77.5946,
-      "score": 70.0,
+      "score": 71.2,
       "bucket": "High",
       "components": {
         "temperature_suitability": 1.0,
         "humidity": 1.0,
-        "rain_recent": 0.448,
-        "rain_lagged": 0.641
+        "rain_recent": 0.462,
+        "rain_lagged": 0.659
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 25.3,
-        "temp_max_c": 31.8,
-        "temp_min_c": 22.0,
-        "humidity_pct": 73.2,
-        "rain_recent_mm": 17.8,
-        "rain_lagged_mm": 30.7,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 25.2,
+        "temp_max_c": 29.5,
+        "temp_min_c": 21.0,
+        "humidity_pct": 74.3,
+        "rain_recent_mm": 18.6,
+        "rain_lagged_mm": 32.3,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
       }
@@ -161,22 +161,22 @@
       "state": "West Bengal",
       "lat": 22.5726,
       "lon": 88.3639,
-      "score": 66.9,
+      "score": 69.3,
       "bucket": "High",
       "components": {
-        "temperature_suitability": 1.0,
+        "temperature_suitability": 0.9,
         "humidity": 1.0,
-        "rain_recent": 0.814,
-        "rain_lagged": 0.367
+        "rain_recent": 0.58,
+        "rain_lagged": 0.722
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 29.9,
-        "temp_max_c": 37.2,
-        "temp_min_c": 28.3,
-        "humidity_pct": 75.1,
-        "rain_recent_mm": 50.5,
-        "rain_lagged_mm": 13.7,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 30.5,
+        "temp_max_c": 37.5,
+        "temp_min_c": 29.1,
+        "humidity_pct": 72.4,
+        "rain_recent_mm": 26.0,
+        "rain_lagged_mm": 38.4,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
       }
@@ -186,22 +186,22 @@
       "state": "Tamil Nadu",
       "lat": 11.0168,
       "lon": 76.9558,
-      "score": 65.9,
+      "score": 69.2,
       "bucket": "High",
       "components": {
         "temperature_suitability": 1.0,
         "humidity": 1.0,
-        "rain_recent": 0.564,
-        "rain_lagged": 0.485
+        "rain_recent": 0.539,
+        "rain_lagged": 0.573
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 28.2,
-        "temp_max_c": 33.3,
-        "temp_min_c": 24.2,
-        "humidity_pct": 70.2,
-        "rain_recent_mm": 24.9,
-        "rain_lagged_mm": 19.9,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 28.0,
+        "temp_max_c": 31.2,
+        "temp_min_c": 23.5,
+        "humidity_pct": 70.5,
+        "rain_recent_mm": 23.2,
+        "rain_lagged_mm": 25.5,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
       }
@@ -211,22 +211,22 @@
       "state": "Odisha",
       "lat": 20.2961,
       "lon": 85.8245,
-      "score": 55.2,
+      "score": 56.4,
       "bucket": "High",
       "components": {
-        "temperature_suitability": 0.903,
+        "temperature_suitability": 0.889,
         "humidity": 1.0,
-        "rain_recent": 0.578,
-        "rain_lagged": 0.371
+        "rain_recent": 0.387,
+        "rain_lagged": 0.528
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 30.5,
-        "temp_max_c": 35.5,
-        "temp_min_c": 28.0,
-        "humidity_pct": 78.1,
-        "rain_recent_mm": 25.9,
-        "rain_lagged_mm": 13.9,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 30.6,
+        "temp_max_c": 36.8,
+        "temp_min_c": 27.6,
+        "humidity_pct": 77.7,
+        "rain_recent_mm": 14.7,
+        "rain_lagged_mm": 22.5,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
       }
@@ -236,22 +236,22 @@
       "state": "Maharashtra",
       "lat": 19.9975,
       "lon": 73.7898,
-      "score": 51.3,
-      "bucket": "High",
+      "score": 49.7,
+      "bucket": "Moderate",
       "components": {
         "temperature_suitability": 1.0,
-        "humidity": 0.857,
-        "rain_recent": 0.168,
-        "rain_lagged": 0.476
+        "humidity": 0.844,
+        "rain_recent": 0.159,
+        "rain_lagged": 0.453
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
+        "as_of_date": "2026-06-03",
         "temp_mean_c": 28.7,
-        "temp_max_c": 34.0,
+        "temp_max_c": 35.0,
         "temp_min_c": 23.4,
-        "humidity_pct": 65.7,
-        "rain_recent_mm": 5.5,
-        "rain_lagged_mm": 19.4,
+        "humidity_pct": 65.3,
+        "rain_recent_mm": 5.2,
+        "rain_lagged_mm": 18.1,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
       }
@@ -261,22 +261,22 @@
       "state": "Jharkhand",
       "lat": 23.3441,
       "lon": 85.3096,
-      "score": 45.1,
+      "score": 46.1,
       "bucket": "Moderate",
       "components": {
         "temperature_suitability": 1.0,
-        "humidity": 1.0,
-        "rain_recent": 0.593,
-        "rain_lagged": 0.007
+        "humidity": 0.976,
+        "rain_recent": 0.578,
+        "rain_lagged": 0.052
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
+        "as_of_date": "2026-06-03",
         "temp_mean_c": 26.6,
-        "temp_max_c": 33.2,
-        "temp_min_c": 23.3,
-        "humidity_pct": 70.2,
-        "rain_recent_mm": 27.0,
-        "rain_lagged_mm": 0.2,
+        "temp_max_c": 32.8,
+        "temp_min_c": 24.5,
+        "humidity_pct": 69.3,
+        "rain_recent_mm": 25.9,
+        "rain_lagged_mm": 1.6,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
       }
@@ -286,22 +286,22 @@
       "state": "Maharashtra",
       "lat": 18.5204,
       "lon": 73.8567,
-      "score": 43.7,
+      "score": 44.0,
       "bucket": "Moderate",
       "components": {
         "temperature_suitability": 1.0,
-        "humidity": 0.752,
-        "rain_recent": 0.184,
-        "rain_lagged": 0.367
+        "humidity": 0.759,
+        "rain_recent": 0.232,
+        "rain_lagged": 0.343
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 29.2,
-        "temp_max_c": 35.3,
-        "temp_min_c": 24.7,
-        "humidity_pct": 62.6,
-        "rain_recent_mm": 6.1,
-        "rain_lagged_mm": 13.7,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 29.0,
+        "temp_max_c": 35.7,
+        "temp_min_c": 23.5,
+        "humidity_pct": 62.8,
+        "rain_recent_mm": 7.9,
+        "rain_lagged_mm": 12.6,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
       }
@@ -311,22 +311,22 @@
       "state": "Bihar",
       "lat": 25.5941,
       "lon": 85.1376,
-      "score": 42.8,
+      "score": 41.6,
       "bucket": "Moderate",
       "components": {
         "temperature_suitability": 1.0,
-        "humidity": 0.956,
-        "rain_recent": 0.495,
-        "rain_lagged": 0.039
+        "humidity": 0.945,
+        "rain_recent": 0.487,
+        "rain_lagged": 0.023
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 29.6,
-        "temp_max_c": 36.2,
-        "temp_min_c": 28.5,
-        "humidity_pct": 68.7,
-        "rain_recent_mm": 20.5,
-        "rain_lagged_mm": 1.2,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 29.9,
+        "temp_max_c": 35.8,
+        "temp_min_c": 27.7,
+        "humidity_pct": 68.4,
+        "rain_recent_mm": 20.0,
+        "rain_lagged_mm": 0.7,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
       }
@@ -336,22 +336,22 @@
       "state": "Maharashtra",
       "lat": 19.076,
       "lon": 72.8777,
-      "score": 32.2,
+      "score": 35.0,
       "bucket": "Moderate",
       "components": {
-        "temperature_suitability": 0.689,
-        "humidity": 0.892,
-        "rain_recent": 0.314,
-        "rain_lagged": 0.269
+        "temperature_suitability": 0.746,
+        "humidity": 0.904,
+        "rain_recent": 0.302,
+        "rain_lagged": 0.274
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 31.6,
-        "temp_max_c": 33.4,
-        "temp_min_c": 27.3,
-        "humidity_pct": 66.8,
-        "rain_recent_mm": 11.3,
-        "rain_lagged_mm": 9.4,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 31.3,
+        "temp_max_c": 32.8,
+        "temp_min_c": 27.8,
+        "humidity_pct": 67.1,
+        "rain_recent_mm": 10.8,
+        "rain_lagged_mm": 9.6,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
       }
@@ -361,21 +361,21 @@
       "state": "Gujarat",
       "lat": 21.1702,
       "lon": 72.8311,
-      "score": 27.8,
+      "score": 29.2,
       "bucket": "Moderate",
       "components": {
-        "temperature_suitability": 0.734,
-        "humidity": 0.959,
-        "rain_recent": 0.323,
+        "temperature_suitability": 0.757,
+        "humidity": 0.976,
+        "rain_recent": 0.327,
         "rain_lagged": 0.023
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 31.3,
-        "temp_max_c": 35.1,
-        "temp_min_c": 25.5,
-        "humidity_pct": 68.8,
-        "rain_recent_mm": 11.7,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 31.2,
+        "temp_max_c": 35.2,
+        "temp_min_c": 28.0,
+        "humidity_pct": 69.3,
+        "rain_recent_mm": 11.9,
         "rain_lagged_mm": 0.7,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
@@ -386,22 +386,47 @@
       "state": "Uttar Pradesh",
       "lat": 26.8467,
       "lon": 80.9462,
-      "score": 25.3,
+      "score": 28.8,
       "bucket": "Moderate",
       "components": {
-        "temperature_suitability": 0.943,
-        "humidity": 0.664,
-        "rain_recent": 0.234,
+        "temperature_suitability": 1.0,
+        "humidity": 0.753,
+        "rain_recent": 0.205,
         "rain_lagged": 0.023
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 30.3,
-        "temp_max_c": 36.2,
-        "temp_min_c": 24.2,
-        "humidity_pct": 59.9,
-        "rain_recent_mm": 8.0,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 30.0,
+        "temp_max_c": 35.8,
+        "temp_min_c": 25.9,
+        "humidity_pct": 62.6,
+        "rain_recent_mm": 6.9,
         "rain_lagged_mm": 0.7,
+        "days_in_current_window": 7,
+        "days_in_lagged_window": 7
+      }
+    },
+    {
+      "name": "Chandigarh",
+      "state": "Chandigarh",
+      "lat": 30.7333,
+      "lon": 76.7794,
+      "score": 26.3,
+      "bucket": "Moderate",
+      "components": {
+        "temperature_suitability": 1.0,
+        "humidity": 0.507,
+        "rain_recent": 0.407,
+        "rain_lagged": 0.02
+      },
+      "inputs": {
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 28.5,
+        "temp_max_c": 36.7,
+        "temp_min_c": 24.5,
+        "humidity_pct": 55.2,
+        "rain_recent_mm": 15.7,
+        "rain_lagged_mm": 0.6,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
       }
@@ -411,22 +436,22 @@
       "state": "Tamil Nadu",
       "lat": 9.9252,
       "lon": 78.1198,
-      "score": 24.4,
+      "score": 22.9,
       "bucket": "Low",
       "components": {
-        "temperature_suitability": 0.614,
-        "humidity": 0.582,
-        "rain_recent": 0.33,
-        "rain_lagged": 0.312
+        "temperature_suitability": 0.629,
+        "humidity": 0.588,
+        "rain_recent": 0.226,
+        "rain_lagged": 0.293
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
+        "as_of_date": "2026-06-03",
         "temp_mean_c": 31.9,
-        "temp_max_c": 36.9,
-        "temp_min_c": 27.5,
-        "humidity_pct": 57.5,
-        "rain_recent_mm": 12.0,
-        "rain_lagged_mm": 11.2,
+        "temp_max_c": 36.3,
+        "temp_min_c": 26.9,
+        "humidity_pct": 57.6,
+        "rain_recent_mm": 7.7,
+        "rain_lagged_mm": 10.4,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
       }
@@ -439,44 +464,19 @@
       "score": 22.6,
       "bucket": "Low",
       "components": {
-        "temperature_suitability": 0.591,
+        "temperature_suitability": 0.64,
         "humidity": 1.0,
-        "rain_recent": 0.221,
-        "rain_lagged": 0.058
+        "rain_recent": 0.131,
+        "rain_lagged": 0.046
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 32.0,
-        "temp_max_c": 35.5,
-        "temp_min_c": 27.6,
-        "humidity_pct": 70.6,
-        "rain_recent_mm": 7.5,
-        "rain_lagged_mm": 1.8,
-        "days_in_current_window": 7,
-        "days_in_lagged_window": 7
-      }
-    },
-    {
-      "name": "Chandigarh",
-      "state": "Chandigarh",
-      "lat": 30.7333,
-      "lon": 76.7794,
-      "score": 22.1,
-      "bucket": "Low",
-      "components": {
-        "temperature_suitability": 1.0,
-        "humidity": 0.38,
-        "rain_recent": 0.391,
-        "rain_lagged": 0.02
-      },
-      "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 28.9,
-        "temp_max_c": 34.5,
-        "temp_min_c": 23.8,
-        "humidity_pct": 51.4,
-        "rain_recent_mm": 14.9,
-        "rain_lagged_mm": 0.6,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 31.8,
+        "temp_max_c": 36.2,
+        "temp_min_c": 27.3,
+        "humidity_pct": 72.2,
+        "rain_recent_mm": 4.2,
+        "rain_lagged_mm": 1.4,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
       }
@@ -486,21 +486,46 @@
       "state": "Uttar Pradesh",
       "lat": 25.3176,
       "lon": 82.9739,
-      "score": 19.4,
+      "score": 21.7,
       "bucket": "Low",
       "components": {
-        "temperature_suitability": 0.749,
-        "humidity": 0.615,
-        "rain_recent": 0.3,
+        "temperature_suitability": 0.809,
+        "humidity": 0.639,
+        "rain_recent": 0.309,
         "rain_lagged": 0.0
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 31.3,
-        "temp_max_c": 37.8,
-        "temp_min_c": 27.7,
-        "humidity_pct": 58.5,
-        "rain_recent_mm": 10.7,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 31.0,
+        "temp_max_c": 38.0,
+        "temp_min_c": 27.0,
+        "humidity_pct": 59.2,
+        "rain_recent_mm": 11.1,
+        "rain_lagged_mm": 0.0,
+        "days_in_current_window": 7,
+        "days_in_lagged_window": 7
+      }
+    },
+    {
+      "name": "Kanpur",
+      "state": "Uttar Pradesh",
+      "lat": 26.4499,
+      "lon": 80.3319,
+      "score": 21.4,
+      "bucket": "Low",
+      "components": {
+        "temperature_suitability": 0.794,
+        "humidity": 0.568,
+        "rain_recent": 0.395,
+        "rain_lagged": 0.0
+      },
+      "inputs": {
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 31.0,
+        "temp_max_c": 37.9,
+        "temp_min_c": 27.5,
+        "humidity_pct": 57.0,
+        "rain_recent_mm": 15.1,
         "rain_lagged_mm": 0.0,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
@@ -511,96 +536,21 @@
       "state": "Delhi",
       "lat": 28.6139,
       "lon": 77.209,
-      "score": 16.5,
+      "score": 20.8,
       "bucket": "Low",
       "components": {
-        "temperature_suitability": 0.843,
-        "humidity": 0.378,
-        "rain_recent": 0.33,
+        "temperature_suitability": 0.917,
+        "humidity": 0.469,
+        "rain_recent": 0.343,
         "rain_lagged": 0.0
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 30.8,
-        "temp_max_c": 34.0,
-        "temp_min_c": 24.3,
-        "humidity_pct": 51.3,
-        "rain_recent_mm": 12.0,
-        "rain_lagged_mm": 0.0,
-        "days_in_current_window": 7,
-        "days_in_lagged_window": 7
-      }
-    },
-    {
-      "name": "Hyderabad",
-      "state": "Telangana",
-      "lat": 17.385,
-      "lon": 78.4867,
-      "score": 15.4,
-      "bucket": "Low",
-      "components": {
-        "temperature_suitability": 0.72,
-        "humidity": 0.285,
-        "rain_recent": 0.128,
-        "rain_lagged": 0.213
-      },
-      "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 31.4,
-        "temp_max_c": 37.8,
-        "temp_min_c": 27.3,
-        "humidity_pct": 48.6,
-        "rain_recent_mm": 4.1,
-        "rain_lagged_mm": 7.2,
-        "days_in_current_window": 7,
-        "days_in_lagged_window": 7
-      }
-    },
-    {
-      "name": "Srinagar",
-      "state": "Jammu & Kashmir",
-      "lat": 34.0837,
-      "lon": 74.7973,
-      "score": 14.6,
-      "bucket": "Low",
-      "components": {
-        "temperature_suitability": 0.314,
-        "humidity": 0.545,
-        "rain_recent": 0.033,
-        "rain_lagged": 0.654
-      },
-      "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 20.2,
-        "temp_max_c": 28.6,
-        "temp_min_c": 13.6,
-        "humidity_pct": 56.4,
-        "rain_recent_mm": 1.0,
-        "rain_lagged_mm": 31.8,
-        "days_in_current_window": 7,
-        "days_in_lagged_window": 7
-      }
-    },
-    {
-      "name": "Kanpur",
-      "state": "Uttar Pradesh",
-      "lat": 26.4499,
-      "lon": 80.3319,
-      "score": 14.4,
-      "bucket": "Low",
-      "components": {
-        "temperature_suitability": 0.671,
-        "humidity": 0.432,
-        "rain_recent": 0.336,
-        "rain_lagged": 0.0
-      },
-      "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 31.6,
-        "temp_max_c": 36.7,
-        "temp_min_c": 24.1,
-        "humidity_pct": 53.0,
-        "rain_recent_mm": 12.3,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 30.4,
+        "temp_max_c": 39.5,
+        "temp_min_c": 28.9,
+        "humidity_pct": 54.1,
+        "rain_recent_mm": 12.6,
         "rain_lagged_mm": 0.0,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
@@ -611,22 +561,72 @@
       "state": "Tamil Nadu",
       "lat": 13.0827,
       "lon": 80.2707,
-      "score": 13.2,
+      "score": 16.6,
       "bucket": "Low",
       "components": {
-        "temperature_suitability": 0.451,
-        "humidity": 0.703,
-        "rain_recent": 0.11,
+        "temperature_suitability": 0.474,
+        "humidity": 0.752,
+        "rain_recent": 0.286,
         "rain_lagged": 0.119
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 32.7,
-        "temp_max_c": 37.8,
-        "temp_min_c": 29.1,
-        "humidity_pct": 61.1,
-        "rain_recent_mm": 3.5,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 32.6,
+        "temp_max_c": 37.5,
+        "temp_min_c": 27.9,
+        "humidity_pct": 62.6,
+        "rain_recent_mm": 10.1,
         "rain_lagged_mm": 3.8,
+        "days_in_current_window": 7,
+        "days_in_lagged_window": 7
+      }
+    },
+    {
+      "name": "Srinagar",
+      "state": "Jammu & Kashmir",
+      "lat": 34.0837,
+      "lon": 74.7973,
+      "score": 15.1,
+      "bucket": "Low",
+      "components": {
+        "temperature_suitability": 0.294,
+        "humidity": 0.645,
+        "rain_recent": 0.11,
+        "rain_lagged": 0.65
+      },
+      "inputs": {
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 20.1,
+        "temp_max_c": 26.2,
+        "temp_min_c": 13.2,
+        "humidity_pct": 59.4,
+        "rain_recent_mm": 3.5,
+        "rain_lagged_mm": 31.5,
+        "days_in_current_window": 7,
+        "days_in_lagged_window": 7
+      }
+    },
+    {
+      "name": "Hyderabad",
+      "state": "Telangana",
+      "lat": 17.385,
+      "lon": 78.4867,
+      "score": 13.5,
+      "bucket": "Low",
+      "components": {
+        "temperature_suitability": 0.64,
+        "humidity": 0.193,
+        "rain_recent": 0.128,
+        "rain_lagged": 0.269
+      },
+      "inputs": {
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 31.8,
+        "temp_max_c": 35.9,
+        "temp_min_c": 27.8,
+        "humidity_pct": 45.8,
+        "rain_recent_mm": 4.1,
+        "rain_lagged_mm": 9.4,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
       }
@@ -636,21 +636,21 @@
       "state": "Madhya Pradesh",
       "lat": 22.7196,
       "lon": 75.8577,
-      "score": 8.3,
+      "score": 11.5,
       "bucket": "Low",
       "components": {
-        "temperature_suitability": 0.654,
-        "humidity": 0.208,
-        "rain_recent": 0.259,
+        "temperature_suitability": 0.743,
+        "humidity": 0.279,
+        "rain_recent": 0.283,
         "rain_lagged": 0.0
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 31.7,
-        "temp_max_c": 35.3,
-        "temp_min_c": 23.0,
-        "humidity_pct": 46.2,
-        "rain_recent_mm": 9.0,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 31.3,
+        "temp_max_c": 35.0,
+        "temp_min_c": 25.5,
+        "humidity_pct": 48.4,
+        "rain_recent_mm": 10.0,
         "rain_lagged_mm": 0.0,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
@@ -661,21 +661,21 @@
       "state": "Punjab",
       "lat": 31.634,
       "lon": 74.8723,
-      "score": 7.0,
+      "score": 9.4,
       "bucket": "Low",
       "components": {
-        "temperature_suitability": 0.834,
-        "humidity": 0.159,
-        "rain_recent": 0.104,
+        "temperature_suitability": 0.897,
+        "humidity": 0.225,
+        "rain_recent": 0.107,
         "rain_lagged": 0.023
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 30.8,
-        "temp_max_c": 36.5,
-        "temp_min_c": 25.8,
-        "humidity_pct": 44.8,
-        "rain_recent_mm": 3.3,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 30.5,
+        "temp_max_c": 37.9,
+        "temp_min_c": 27.4,
+        "humidity_pct": 46.7,
+        "rain_recent_mm": 3.4,
         "rain_lagged_mm": 0.7,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
@@ -686,21 +686,21 @@
       "state": "Gujarat",
       "lat": 23.0225,
       "lon": 72.5714,
-      "score": 6.4,
+      "score": 7.0,
       "bucket": "Low",
       "components": {
-        "temperature_suitability": 0.286,
-        "humidity": 0.521,
-        "rain_recent": 0.264,
+        "temperature_suitability": 0.311,
+        "humidity": 0.533,
+        "rain_recent": 0.262,
         "rain_lagged": 0.0
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 33.6,
-        "temp_max_c": 37.2,
-        "temp_min_c": 25.9,
-        "humidity_pct": 55.6,
-        "rain_recent_mm": 9.2,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 33.4,
+        "temp_max_c": 39.5,
+        "temp_min_c": 29.1,
+        "humidity_pct": 56.0,
+        "rain_recent_mm": 9.1,
         "rain_lagged_mm": 0.0,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
@@ -711,47 +711,22 @@
       "state": "Rajasthan",
       "lat": 26.9124,
       "lon": 75.7873,
-      "score": 3.6,
+      "score": 6.3,
       "bucket": "Low",
       "components": {
-        "temperature_suitability": 0.6,
-        "humidity": 0.122,
-        "rain_recent": 0.089,
+        "temperature_suitability": 0.751,
+        "humidity": 0.196,
+        "rain_recent": 0.092,
         "rain_lagged": 0.003
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 32.0,
-        "temp_max_c": 35.8,
-        "temp_min_c": 24.4,
-        "humidity_pct": 43.7,
-        "rain_recent_mm": 2.8,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 31.2,
+        "temp_max_c": 39.0,
+        "temp_min_c": 27.2,
+        "humidity_pct": 45.9,
+        "rain_recent_mm": 2.9,
         "rain_lagged_mm": 0.1,
-        "days_in_current_window": 7,
-        "days_in_lagged_window": 7
-      }
-    },
-    {
-      "name": "Jodhpur",
-      "state": "Rajasthan",
-      "lat": 26.2389,
-      "lon": 73.0243,
-      "score": 0.9,
-      "bucket": "Low",
-      "components": {
-        "temperature_suitability": 0.194,
-        "humidity": 0.131,
-        "rain_recent": 0.03,
-        "rain_lagged": 0.0
-      },
-      "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 34.0,
-        "temp_max_c": 39.3,
-        "temp_min_c": 27.9,
-        "humidity_pct": 43.9,
-        "rain_recent_mm": 0.9,
-        "rain_lagged_mm": 0.0,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
       }
@@ -761,21 +736,71 @@
       "state": "Madhya Pradesh",
       "lat": 23.2599,
       "lon": 77.4126,
-      "score": 0.6,
+      "score": 3.0,
       "bucket": "Low",
       "components": {
-        "temperature_suitability": 0.274,
+        "temperature_suitability": 0.483,
         "humidity": 0.0,
-        "rain_recent": 0.092,
+        "rain_recent": 0.252,
         "rain_lagged": 0.0
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 32.6,
+        "temp_max_c": 36.8,
+        "temp_min_c": 26.9,
+        "humidity_pct": 38.7,
+        "rain_recent_mm": 8.7,
+        "rain_lagged_mm": 0.0,
+        "days_in_current_window": 7,
+        "days_in_lagged_window": 7
+      }
+    },
+    {
+      "name": "Jodhpur",
+      "state": "Rajasthan",
+      "lat": 26.2389,
+      "lon": 73.0243,
+      "score": 1.8,
+      "bucket": "Low",
+      "components": {
+        "temperature_suitability": 0.28,
+        "humidity": 0.188,
+        "rain_recent": 0.03,
+        "rain_lagged": 0.0
+      },
+      "inputs": {
+        "as_of_date": "2026-06-03",
         "temp_mean_c": 33.6,
-        "temp_max_c": 36.5,
-        "temp_min_c": 24.8,
-        "humidity_pct": 33.6,
-        "rain_recent_mm": 2.9,
+        "temp_max_c": 40.2,
+        "temp_min_c": 29.5,
+        "humidity_pct": 45.7,
+        "rain_recent_mm": 0.9,
+        "rain_lagged_mm": 0.0,
+        "days_in_current_window": 7,
+        "days_in_lagged_window": 7
+      }
+    },
+    {
+      "name": "Raipur",
+      "state": "Chhattisgarh",
+      "lat": 21.2514,
+      "lon": 81.6296,
+      "score": 0.4,
+      "bucket": "Low",
+      "components": {
+        "temperature_suitability": 0.146,
+        "humidity": 0.0,
+        "rain_recent": 0.11,
+        "rain_lagged": 0.0
+      },
+      "inputs": {
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 34.3,
+        "temp_max_c": 39.7,
+        "temp_min_c": 28.6,
+        "humidity_pct": 39.4,
+        "rain_recent_mm": 3.5,
         "rain_lagged_mm": 0.0,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
@@ -791,42 +816,17 @@
       "components": {
         "temperature_suitability": 0.0,
         "humidity": 0.0,
-        "rain_recent": 0.046,
+        "rain_recent": 0.058,
         "rain_lagged": 0.003
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 35.9,
-        "temp_max_c": 39.2,
-        "temp_min_c": 28.5,
-        "humidity_pct": 29.8,
-        "rain_recent_mm": 1.4,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 35.4,
+        "temp_max_c": 39.3,
+        "temp_min_c": 30.2,
+        "humidity_pct": 31.2,
+        "rain_recent_mm": 1.8,
         "rain_lagged_mm": 0.1,
-        "days_in_current_window": 7,
-        "days_in_lagged_window": 7
-      }
-    },
-    {
-      "name": "Raipur",
-      "state": "Chhattisgarh",
-      "lat": 21.2514,
-      "lon": 81.6296,
-      "score": 0.0,
-      "bucket": "Low",
-      "components": {
-        "temperature_suitability": 0.011,
-        "humidity": 0.0,
-        "rain_recent": 0.033,
-        "rain_lagged": 0.0
-      },
-      "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 34.9,
-        "temp_max_c": 39.4,
-        "temp_min_c": 29.1,
-        "humidity_pct": 36.4,
-        "rain_recent_mm": 1.0,
-        "rain_lagged_mm": 0.0,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
       }
@@ -840,17 +840,17 @@
       "bucket": "Low",
       "components": {
         "temperature_suitability": 0.0,
-        "humidity": 0.711,
-        "rain_recent": 0.568,
+        "humidity": 0.926,
+        "rain_recent": 0.557,
         "rain_lagged": 0.134
       },
       "inputs": {
-        "as_of_date": "2026-06-02",
-        "temp_mean_c": 15.7,
-        "temp_max_c": 21.4,
-        "temp_min_c": 11.3,
-        "humidity_pct": 61.3,
-        "rain_recent_mm": 25.2,
+        "as_of_date": "2026-06-03",
+        "temp_mean_c": 15.2,
+        "temp_max_c": 22.4,
+        "temp_min_c": 11.1,
+        "humidity_pct": 67.8,
+        "rain_recent_mm": 24.4,
         "rain_lagged_mm": 4.3,
         "days_in_current_window": 7,
         "days_in_lagged_window": 7
