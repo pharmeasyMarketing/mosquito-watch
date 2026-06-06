@@ -6,8 +6,10 @@ name: Monthly - site redeploy (Layer 3 IDSP season parked)
 # allowed to fail so a bad source week never blocks the deploy of the other layers.
 
 on:
-  schedule:
-    - cron: "30 3 1 * *"      # 1st of month, 09:00 IST (03:30 UTC)
+  # Scheduled cron PAUSED 2026-06-06 per request -- no automatic monthly runs.
+  # Re-enable by uncommenting the schedule block below.
+  # schedule:
+  #   - cron: "30 3 1 * *"      # 1st of month, 09:00 IST (03:30 UTC)
   workflow_dispatch:
 
 permissions:

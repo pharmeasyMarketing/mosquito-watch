@@ -4,8 +4,10 @@ name: Daily - Layer 1 breeding weather
 # commits the new data, and deploys. Open-Meteo needs no API key.
 
 on:
-  schedule:
-    - cron: "30 1 * * *"      # 07:00 IST (01:30 UTC) daily
+  # Scheduled cron PAUSED 2026-06-06 per request -- no automatic daily runs.
+  # Re-enable by uncommenting the schedule block below.
+  # schedule:
+  #   - cron: "30 1 * * *"      # 07:00 IST (01:30 UTC) daily
   workflow_dispatch:
 
 permissions:
